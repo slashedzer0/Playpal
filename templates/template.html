@@ -32,7 +32,7 @@
   <!-- navbar -->
   <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand fw-semibold fs-4" href="#">
+      <a class="navbar-brand fw-semibold fs-4" href="/">
         <i class="fa-regular fa-planet-ringed"></i>&nbsp;<span style="font-family: 'Chakra Petch';">PLAYPAL</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
@@ -42,37 +42,46 @@
       <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a class="nav-link active fw-semibold fs-5" href="#">Home</a>
+            <a class="nav-link active fw-semibold fs-5" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active fw-semibold fs-5" href="#">Talent</a>
+            <a class="nav-link active fw-semibold fs-5" href="/talents">Talents</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item visually-hidden" id="dashboard-navbar">
             <a class="nav-link active fw-semibold fs-5" href="#">Dashboard</a>
           </li>
         </ul>
-        <div class="btn-group">
+        <div class="btn-group visually-hidden" id="profile-menu">
           <button type="button" class="btn btn-outline-link fw-semibold" data-bs-toggle="dropdown"
             aria-expanded="false">
             <img src="/static/img/profiles/profile-pic.jpg" class="rounded-circle" width="30" height="30"
               loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Log Out</a></li>
+            <li>
+            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Edit</a></li>
+            <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
+                Out</a>
+            </li>
           </ul>
         </div>
-        <button type="button" class="btn btn-outline-light fw-semibold">LOG IN</button>
+
+        <a href="/login" class="btn btn-outline-light fw-semibold fs-5 px-4 py-0" id="login-navbar">LOG IN</a>
       </div>
     </div>
   </nav>
 
   <!-- header -->
   <header id="#">
-    <div class="container col-xxl-8 p-5 my-4">
+    <div class="container col-xxl-9 p-3 my-4">
       <!-- code here -->
-      
+
     </div>
   </header>
 
@@ -80,14 +89,16 @@
   <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
       <div class="col-md-4 d-flex align-items-center">
-        <i class="fa-regular fa-planet-ringed fs-5"></i>&nbsp;
         <span class="mb-3 mb-md-0 fw-semibold text-body-secondary">© 2023 Playpal Entertainment, Inc</span>
       </div>
 
       <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-        <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-x-twitter fs-5"></i></a></li>
-        <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-instagram fs-5"></i></a></li>
-        <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-facebook fs-5"></i></a></li>
+        <li class="ms-3"><a class="text-body-secondary" href="javascript:void(0);"><i
+              class="fa-brands fa-x-twitter fs-5"></i></a></li>
+        <li class="ms-3"><a class="text-body-secondary" href="javascript:void(0);"><i
+              class="fa-brands fa-instagram fs-5"></i></a></li>
+        <li class="ms-3"><a class="text-body-secondary" href="javascript:void(0);"><i
+              class="fa-brands fa-facebook fs-5"></i></a></li>
       </ul>
     </footer>
   </div>

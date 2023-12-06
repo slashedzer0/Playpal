@@ -23,9 +23,9 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/regis as customer')
-def regis_customer():
-    return render_template('register as customer.html')
+@app.route('/register')
+def register_customer():
+    return render_template('register_customer.html')
 
 @app.route('/login')
 def login():
