@@ -43,6 +43,9 @@ def profile():
 def talents():
     return render_template('talents.html')
 
+@app.route('/games')
+def games():
+    return render_template('games.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
