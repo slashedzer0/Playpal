@@ -39,6 +39,10 @@ def login():
 def profile():
     return render_template('profile.html')
 
+@app.route('/talents')
+def talents():
+    return render_template('talents.html')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
