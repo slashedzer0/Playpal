@@ -10,6 +10,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+
   <!-- google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +21,8 @@
     href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <!-- custom css -->
-  <link rel="stylesheet" href="css/style.css" type="text/css">
+<!-- custom css -->
+<link href="{{ url_for('static', filename='/css/style.css') }}" rel="stylesheet" type="text/css">
 
   <!-- font awesome -->
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.0/css/all.css">
@@ -45,25 +49,42 @@
             <a class="nav-link active fw-semibold fs-5" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active fw-semibold fs-5" href="#">Talent</a>
+            <a class="nav-link active fw-semibold fs-5" href="/talents">Talents</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item visually-hidden" id="dashboard-navbar">
             <a class="nav-link active fw-semibold fs-5" href="#">Dashboard</a>
           </li>
         </ul>
-        <div class="btn-group">
+        <div class="btn-group" id="profile-menu">
           <button type="button" class="btn btn-outline-link fw-semibold" data-bs-toggle="dropdown"
             aria-expanded="false">
             <img src="/static/img/profiles/profile-pic.jpg" class="rounded-circle" width="30" height="30"
               loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Log Out</a></li>
+            <li>
+            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
+                Settings</a>
+            </li>
+            <hr class="dropdown-divider">
+            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
+                Settings</a>
+            </li>
+            <hr class="dropdown-divider">
+            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete Account</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
+                Out</a>
+            </li>
           </ul>
         </div>
-        <button type="button" class="btn btn-outline-light fw-semibold">LOG IN</button>
+
+        <a href="/login" class="btn btn-outline-light fw-semibold fs-5 px-4 py-0" id="login-navbar">LOG IN</a>
       </div>
     </div>
   </nav>
@@ -83,7 +104,7 @@
                     <input type="password" class="form-control" id="password" placeholder="Password">
                 </div>
                 <div class="mt-5 mb-3">
-                    <a href="#" class="btn btn-primary form-control ">LOGIN</a>
+                    <a href="#" class="btn btn-dark form-control " >LOGIN</a>
                 </div>
                 <p class="card-text text-center mb-4">Don't have an account?<a href="#" class="link-underline-primary mx-2">Sign Up</a></p>
             </div>
@@ -95,14 +116,16 @@
   <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
       <div class="col-md-4 d-flex align-items-center">
-        <i class="fa-regular fa-planet-ringed fs-5"></i>&nbsp;
         <span class="mb-3 mb-md-0 fw-semibold text-body-secondary">© 2023 Playpal Entertainment, Inc</span>
       </div>
 
       <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-        <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-x-twitter fs-5"></i></a></li>
-        <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-instagram fs-5"></i></a></li>
-        <li class="ms-3"><a class="text-body-secondary" href="#"><i class="fa-brands fa-facebook fs-5"></i></a></li>
+        <li class="ms-3"><a class="text-body-secondary" href="javascript:void(0);"><i
+              class="fa-brands fa-x-twitter fs-5"></i></a></li>
+        <li class="ms-3"><a class="text-body-secondary" href="javascript:void(0);"><i
+              class="fa-brands fa-instagram fs-5"></i></a></li>
+        <li class="ms-3"><a class="text-body-secondary" href="javascript:void(0);"><i
+              class="fa-brands fa-facebook fs-5"></i></a></li>
       </ul>
     </footer>
   </div>
