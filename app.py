@@ -39,17 +39,41 @@ def login():
 def profile():
     return render_template('profile.html')
 
+
 @app.route('/talents')
 def talents():
     return render_template('talents.html')
+
 
 @app.route('/games')
 def games():
     return render_template('games.html')
 
+
+@app.route('/customer-summary')
+def customer_summary():
+    return render_template('/customer/summary.html')
+
+
 @app.route('/customer-history')
 def customer_history():
     return render_template('/customer/history.html')
+
+
+@app.route('/talent-summary')
+def talent_summary():
+    return render_template('/talent/summary.html')
+
+
+@app.route('/talent-history')
+def talent_history():
+    return render_template('/talent/history.html')
+
+
+@app.route('/talent-orders')
+def talent_orders():
+    return render_template('/talent/orders.html')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
