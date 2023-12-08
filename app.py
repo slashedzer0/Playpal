@@ -47,5 +47,9 @@ def talents():
 def games():
     return render_template('games.html')
 
+@app.route('/customer-history')
+def customer_history():
+    return render_template('/customer/history.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
