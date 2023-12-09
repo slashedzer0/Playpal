@@ -62,9 +62,10 @@
     </nav>
 
     <section>
+        <!-- form register customer -->
         <div id="regiscustomer-box" class="container col-xxl-9 p-3 my-4">
             <div class="d-flex align-items-center justify-content-center vh-100">
-                <div class="card p-5" style="width: 28rem;">
+                <div class="card px-5 py-3" style="width: 28rem;">
                     <h1 class="card-title text-center mb-4">Join Us</h1>
                     <p class="card-text text-center fw-medium fs-5 text-secondary">Create your account</p>
                     <div class="mb-3">
@@ -79,7 +80,7 @@
                     </div>
                     <div id="help-customer" class="text-danger invisible">
                         <!-- teks peringatan akan muncul disini -->
-                        test
+                        dummy text
                     </div>
                     <div class="mt-5 mb-3">
                         <button class="btn btn-lg btn-dark form-control fw-semibold" onclick="register_customer()">SIGN
@@ -95,10 +96,12 @@
                 </div>
             </div>
         </div>
+
+        <!-- form register talent -->
         <div id="registalent-box" class="container col-xxl-9 p-3 my-4 visually-hidden">
             <div class="d-flex align-items-center justify-content-center vh-100">
                 <!-- code here -->
-                <div class="card p-5" style="width: 28rem;">
+                <div class="card px-5 py-3" style="width: 28rem;">
                     <h1 class="card-title text-center mb-4">Team Up</h1>
                     <p class="card-text text-center fw-medium fs-5 text-secondary">Create your account</p>
                     <div class="mb-3">
@@ -113,7 +116,7 @@
                     </div>
                     <div class="mb-3">
                         <select class="form-select" id="game" name="game">
-                            <option selected hidden>-- Choose a game --</option>
+                            <option selected hidden value="">-- Choose a game --</option>
                             <option value="Apex Legends">Apex Legends</option>
                             <option value="Call of Duty Mobile">Call of Duty Mobile</option>
                             <option value="Dota 2">Dota 2</option>
@@ -130,7 +133,7 @@
                     </div>
                     <div class="mb-3">
                         <select class="form-select" id="price" name="price">
-                            <option selected hidden>-- Choose a unit price --</option>
+                            <option selected hidden value="">-- Choose a unit price --</option>
                             <option value="10000">10k/match</option>
                             <option value="20000">20k/match</option>
                             <option value="30000">30k/match</option>
@@ -141,8 +144,13 @@
                             <option value="100000">100k/hour</option>
                         </select>
                     </div>
+                    <div id="help-talent" class="text-danger invisible">
+                        <!-- teks peringatan akan muncul di sini -->
+                        dummy text
+                    </div>
                     <div class="mb-3 mt-5">
-                        <a href="#" class="btn btn-lg btn-dark form-control fw-semibold">APPLY</a>
+                        <button class="btn btn-lg btn-dark form-control fw-semibold"
+                            onclick="register_talent()">APPLY</button>
                     </div>
                     <div class="mb-3">
                         <a href="#" class="btn btn-lg btn-outline-dark form-control fw-semibold"
@@ -154,7 +162,7 @@
 
                 </div>
             </div>
-
+        </div>
     </section>
 
     <!-- footer -->
@@ -179,49 +187,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+
+    <!-- custom js -->
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-
-    <script>
-        function register_customer() {
-            let fullname = $("#fullname-customer").val();
-            let username = $("#username-customer").val();
-            let password = $("#password-customer").val();
-
-            if (fullname === '') {
-                $("#help-customer").text('Please fill in fullname')
-                    .removeClass('invisible')
-                return;
-            } else if (username === '') {
-                $("#help-customer").text('Please fill in username')
-                    .removeClass('invisible')
-                return;
-            } else if (password === '') {
-                $("#help-customer").text('Please fill in password')
-                    .removeClass('invisible')
-                return;
-            }
-            $.ajax({
-                type: "POST",
-                url: "/api/register_customer",
-                data: {
-                    fullname: fullname,
-                    username: username,
-                    password: password,
-                },
-                success: function (response) {
-                    exists = response['exists']
-                    console.log(response)
-                    if (exists) {
-                        $("#help-customer").text('Username already exists')
-                            .removeClass('invisible')
-                        return
-                    }
-                    window.location.replace("/login");
-                },
-            });
-        }
-    </script>
-
 </body>
 
 </html>

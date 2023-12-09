@@ -97,5 +97,31 @@ def register_customer():
     return jsonify({'result': 'success'})
 
 
+@app.route('/api/register_talent', methods=['POST'])
+def register_talent():
+    fullname = request.form['fullname']
+    username = request.form['username']
+    password = request.form['password']
+    game = request.form['game']
+    price = request.form['price']
+    exists = bool(db.users.find_one({"username": username}))
+    if exists:
+        return jsonify({'result': 'failed', 'exists': exists})
+    password_hash = hashlib.sha256(
+        password.encode('utf-8')).hexdigest()
+    doc = {
+        "fullname": fullname,
+        "username": username,
+        "password": password_hash,
+        "game": game,
+        "price": price,
+        "pfp_new": "",
+        "pfp_default": "img/profiles/profile-pic.jpg",
+        "role": "talent",
+    }
+    db.users.insert_one(doc)
+    return jsonify({'result': 'success'})
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
