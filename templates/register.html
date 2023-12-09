@@ -32,33 +32,34 @@
 </head>
 
 <body>
-  <!-- navbar -->
-  <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-semibold fs-4" href="/">
-        <i class="fa-regular fa-planet-ringed"></i>&nbsp;<span style="font-family: 'Chakra Petch';">PLAYPAL</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
-        aria-controls="navbar" aria-expanded="false">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbar">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item">
-            <a class="nav-link active fw-semibold fs-5" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-semibold fs-5" href="/talents">Talents</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-semibold fs-5" href="/games">Games</a>
-          </li>
-        </ul>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-semibold fs-4" href="/">
+                <i class="fa-regular fa-planet-ringed"></i>&nbsp;<span
+                    style="font-family: 'Chakra Petch';">PLAYPAL</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                aria-controls="navbar" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold fs-5" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold fs-5" href="/talents">Talents</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold fs-5" href="/games">Games</a>
+                    </li>
+                </ul>
 
-        <a href="/login" class="btn btn-outline-light fw-semibold fs-5 px-4 py-0" id="login-navbar">LOG IN</a>
-      </div>
-    </div>
-  </nav>
+                <a href="/login" class="btn btn-outline-light fw-semibold fs-5 px-4 py-0" id="login-navbar">LOG IN</a>
+            </div>
+        </div>
+    </nav>
 
     <section>
         <div id="regiscustomer-box" class="container col-xxl-9 p-3 my-4">
@@ -73,10 +74,16 @@
                         <input type="text" class="form-control" id="username-customer" placeholder="Username" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" id="password-customer" placeholder="Password" required>
+                        <input type="password" class="form-control" id="password-customer" placeholder="Password"
+                            required>
+                    </div>
+                    <div id="help-customer" class="text-danger invisible">
+                        <!-- teks peringatan akan muncul disini -->
+                        test
                     </div>
                     <div class="mt-5 mb-3">
-                        <a href="#" class="btn btn-lg btn-dark form-control fw-semibold">SIGN UP</a>
+                        <button class="btn btn-lg btn-dark form-control fw-semibold" onclick="register_customer()">SIGN
+                            UP</button>
                     </div>
                     <div class="mb-3">
                         <a href="#" class="btn btn-lg btn-outline-dark form-control fw-semibold"
@@ -101,7 +108,8 @@
                         <input type="text" class="form-control" id="username-talent" placeholder="Username" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" id="password-talent" placeholder="Password" required>
+                        <input type="password" class="form-control" id="password-talent" placeholder="Password"
+                            required>
                     </div>
                     <div class="mb-3">
                         <select class="form-select" id="game" name="game">
@@ -173,6 +181,46 @@
         crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
+    <script>
+        function register_customer() {
+            let fullname = $("#fullname-customer").val();
+            let username = $("#username-customer").val();
+            let password = $("#password-customer").val();
+
+            if (fullname === '') {
+                $("#help-customer").text('Please fill in fullname')
+                    .removeClass('invisible')
+                return;
+            } else if (username === '') {
+                $("#help-customer").text('Please fill in username')
+                    .removeClass('invisible')
+                return;
+            } else if (password === '') {
+                $("#help-customer").text('Please fill in password')
+                    .removeClass('invisible')
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/api/register_customer",
+                data: {
+                    fullname: fullname,
+                    username: username,
+                    password: password,
+                },
+                success: function (response) {
+                    exists = response['exists']
+                    console.log(response)
+                    if (exists) {
+                        $("#help-customer").text('Username already exists')
+                            .removeClass('invisible')
+                        return
+                    }
+                    window.location.replace("/login");
+                },
+            });
+        }
+    </script>
 
 </body>
 

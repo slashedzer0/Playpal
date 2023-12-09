@@ -1,7 +1,7 @@
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pymongo import MongoClient
 import jwt
 import datetime
@@ -73,6 +73,28 @@ def talent_history():
 @app.route('/talent-orders')
 def talent_orders():
     return render_template('/talent/orders.html')
+
+
+@app.route('/api/register_customer', methods=['POST'])
+def register_customer():
+    fullname = request.form['fullname']
+    username = request.form['username']
+    password = request.form['password']
+    exists = bool(db.users.find_one({"username": username}))
+    if exists:
+        return jsonify({'result': 'failed', 'exists': exists})
+    password_hash = hashlib.sha256(
+        password.encode('utf-8')).hexdigest()
+    doc = {
+        "fullname": fullname,
+        "username": username,
+        "password": password_hash,
+        "pfp_new": "",
+        "pfp_default": "img/profiles/profile-pic.jpg",
+        "role": "customer",
+    }
+    db.users.insert_one(doc)
+    return jsonify({'result': 'success'})
 
 
 if __name__ == '__main__':
