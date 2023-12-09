@@ -292,11 +292,12 @@
   <!-- modals -->
   <div id="modal-review" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content w-75 mx-auto pt-4">
+      <div class="modal-content w-75 mx-auto p-2">
+        <h4 class="modal-title fw-semibold text-center my-3">Add Review</h4>
         <div class="modal-body border-0 px-3 py-0">
           <form action="/api/select_rating" method="POST">
-            <div class="mb-1">
-              <select class="form-select" aria-label="Select rating">
+            <div class="mb-3">
+              <select class="form-select" aria-label="Select rating" required>
                 <option selected hidden>-- Select rating --</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
