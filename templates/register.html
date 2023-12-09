@@ -32,285 +32,121 @@
 </head>
 
 <body>
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-semibold fs-4" href="#">
-                <i class="fa-regular fa-planet-ringed"></i>&nbsp;<span
-                    style="font-family: 'Chakra Petch';">PLAYPAL</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
-                aria-controls="navbar" aria-expanded="false">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link active fw-semibold fs-5" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fw-semibold fs-5" href="/talents">Talents</a>
-                    </li>
-                    <li class="nav-item visually-hidden" id="dashboard-navbar">
-                        <a class="nav-link active fw-semibold fs-5" href="#">Dashboard</a>
-                    </li>
-                </ul>
-                <div class="btn-group" id="profile-menu">
-                    <button type="button" class="btn btn-outline-link fw-semibold" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <img src="/static/img/profiles/profile-pic.jpg" class="rounded-circle" width="30" height="30"
-                            loading="lazy" />
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                        <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                                data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
-                                Settings</a>
-                        </li>
-                        <hr class="dropdown-divider">
-                        <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                                data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
-                                Settings</a>
-                        </li>
-                        <hr class="dropdown-divider">
-                        <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                                data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete
-                                Account</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#"><i
-                                    class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
-                                Out</a>
-                        </li>
-                    </ul>
-                </div>
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-semibold fs-4" href="/">
+        <i class="fa-regular fa-planet-ringed"></i>&nbsp;<span style="font-family: 'Chakra Petch';">PLAYPAL</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+        aria-controls="navbar" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold fs-5" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold fs-5" href="/talents">Talents</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold fs-5" href="/games">Games</a>
+          </li>
+        </ul>
 
-                <a href="/login" class="btn btn-outline-light fw-semibold fs-5 px-4 py-0" id="login-navbar">LOG IN</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- modals -->
-    <div id="modal-account" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content w-75 mx-auto p-2">
-                <div class="modal-header flex-column border-0">
-                    <img src="/static/img/profiles/profile-pic.jpg" class="rounded-circle" width="100" height="100"
-                        loading="lazy" />
-                    <h4 class="modal-title fw-semibold text-center mt-2">John Doe</h4>
-                </div>
-                <div class="modal-body border-0 px-3 py-0">
-                    <form action="/api/update_account" method="POST">
-                        <div class="mb-3">
-                            <label for="fullname" class="form-label fw-semibold">Full name</label>
-                            <input type="text" class="form-control" id="fullname" name="fullname"
-                                placeholder="New name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="username" class="form-label fw-semibold">Username</label>
-                            <input type="text" class="form-control" id="username" name="username"
-                                placeholder="New username">
-                        </div>
-                        <div class="mb-3">
-                            <label for="avatar" class="form-label fw-semibold">Profile picture</label>
-                            <input class="form-control" type="file" id="avatar" name="avatar" accept="image/*">
-                        </div>
-                </div>
-                <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-                    <input type="submit" value="SAVE CHANGES" class="btn btn-dark">
-                </div>
-                </form>
-            </div>
-        </div>
+        <a href="/login" class="btn btn-outline-light fw-semibold fs-5 px-4 py-0" id="login-navbar">LOG IN</a>
+      </div>
     </div>
+  </nav>
 
-    <div id="modal-talent" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content w-75 h-75 mx-auto p-2">
-                <div class="modal-header flex-column border-0">
-                    <img src="/static/img/game-controller.png" alt="controller icon" loading="lazy">
-                    <h4 class="modal-title fw-semibold text-center mt-2">Talent Settings</h4>
-                </div>
-                <div class="modal-body border-0 px-3 py-0">
-                    <form action="/api/update_talent" method="POST">
-                        <div class="mb-3">
-                            <label for="game" class="form-label fw-semibold">Game</label>
-                            <select class="form-select" id="game" name="game">
-                                <option selected hidden>-- Choose a game --</option>
-                                <option value="Apex Legends">Apex Legends</option>
-                                <option value="Call of Duty Mobile">Call of Duty Mobile</option>
-                                <option value="Dota 2">Dota 2</option>
-                                <option value="Fall Guys">Fall Guys</option>
-                                <option value="Free Fire">Free Fire</option>
-                                <option value="Genshin Impact">Genshin Impact</option>
-                                <option value="League of Legends">League of Legends</option>
-                                <option value="Mobile Legends">Mobile Legends</option>
-                                <option value="Point Blank">Point Blank</option>
-                                <option value="Pokémon Unite">Pokémon Unite</option>
-                                <option value="PUBG Mobile">PUBG Mobile</option>
-                                <option value="Valorant">Valorant</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="price" class="form-label fw-semibold">Unit price</label>
-                            <select class="form-select" id="price" name="price">
-                                <option selected hidden>-- Choose a unit price --</option>
-                                <option value="10000">10k/match</option>
-                                <option value="20000">20k/match</option>
-                                <option value="30000">30k/match</option>
-                                <option value="40000">40k/30min</option>
-                                <option value="50000">50k/30min</option>
-                                <option value="60000">60k/hour</option>
-                                <option value="80000">80k/hour</option>
-                                <option value="100000">100k/hour</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="rank" class="form-label fw-semibold">Rank</label>
-                            <input type="text" class="form-control" id="rank" name="rank"
-                                placeholder="Your in-game rank">
-                        </div>
-                        <div class="mb-3">
-                            <label for="since" class="form-label fw-semibold">Played since</label>
-                            <input type="number" class="form-control" id="since" name="since"
-                                placeholder="The first year you played" min="2000" max="9999">
-                        </div>
-                        <div class="mb-3">
-                            <label for="region" class="form-label fw-semibold">Region</label>
-                            <input type="text" class="form-control" id="region" name="region" placeholder="Your region">
-                        </div>
-                        <div class="mb-3">
-                            <label for="platform" class="form-label fw-semibold">Platform</label>
-                            <select class="form-select" id="platform" name="platform">
-                                <option selected hidden>-- Choose a platform --</option>
-                                <option value="PC">PC</option>
-                                <option value="Mobile">Mobile</option>
-                                <option value="Console">Console</option>
-                            </select>
-                        </div>
-                </div>
-                <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-                    <input type="submit" value="SAVE CHANGES" class="btn btn-dark">
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-delete" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content w-75 mx-auto p-2">
-                <div class="modal-header flex-column border-0">
-                    <img src="/static/img/question-mark.png" alt="question mark icon" loading="lazy">
-                    <h4 class="modal-title fw-semibold text-center mt-2">Account Deletion</h4>
-                </div>
-                <div class="modal-body border-0 p-0">
-                    <p class="text-center">Continue to delete your account? <br> This action cannot be undone.</p>
-                </div>
-                <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-                    <button type="button" class="btn btn-danger">CONFIRM</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- header -->
     <section>
-        <div class="container">
-            <div id="regiscustomer-box">
-                <div class="container d-flex justify-content-center col-xxl-8 p-5 my-5">
-                    <!-- code here -->
-                    <div class="card" style="width: 24rem;">
-                        <div class="card-body">
-                            <h1 class="card-title text-center">Join Us</h1>
-                            <p class="card-text text-center">Create your account</p>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="fullname-customer" placeholder="Fullname">
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="username-customer" placeholder="Username">
-                            </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" id="password-customer" placeholder="Password">
-                            </div>
-                            <div class="mt-5 mb-3">
-                                <a href="#" class="btn btn-dark form-control ">SIGN UP</a>
-                            </div>
-                            <div class="mb-3">
-                                <a href="#" class="btn btn-outline-dark form-control "
-                                    onclick="toggle_regis_talent()">REGISTER AS TALENT</a>
-                            </div>
-                            <p class="card-text text-center mb-4">Already have an account?<a href="#"
-                                    class="link-underline-primary mx-2">Log in</a></p>
-                        </div>
+        <div id="regiscustomer-box" class="container col-xxl-9 p-3 my-4">
+            <div class="d-flex align-items-center justify-content-center vh-100">
+                <div class="card p-5" style="width: 28rem;">
+                    <h1 class="card-title text-center mb-4">Join Us</h1>
+                    <p class="card-text text-center fw-medium fs-5 text-secondary">Create your account</p>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="fullname-customer" placeholder="Fullname" required>
                     </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="username-customer" placeholder="Username" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password-customer" placeholder="Password" required>
+                    </div>
+                    <div class="mt-5 mb-3">
+                        <a href="#" class="btn btn-lg btn-dark form-control fw-semibold">SIGN UP</a>
+                    </div>
+                    <div class="mb-3">
+                        <a href="#" class="btn btn-lg btn-outline-dark form-control fw-semibold"
+                            onclick="toggle_regis_talent()">REGISTER
+                            AS TALENT</a>
+                    </div>
+                    <p class="card-text text-center mb-4">Already have an account?<a href="/login"
+                            class="link-underline-primary mx-2">Log in</a></p>
                 </div>
             </div>
-            <div id="registalent-box" class="visually-hidden">
-                <div class="container d-flex justify-content-center col-xxl-8 p-5 my-5">
-                    <!-- code here -->
-                    <div class="card" style="width: 24rem;">
-                        <div class="card-body">
-                            <h1 class="card-title text-center">Team Up</h1>
-                            <p class="card-text text-center mt-4">Create your account</p>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="fullname-talent" placeholder="Fullname">
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="username-talent" placeholder="Username">
-                            </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" id="password-talent" placeholder="Password">
-                            </div>
-                            <div class="mb-3">
-                                <select class="form-select" id="game" name="game">
-                                    <option selected hidden>-- Choose a game --</option>
-                                    <option value="Apex Legends">Apex Legends</option>
-                                    <option value="Call of Duty Mobile">Call of Duty Mobile</option>
-                                    <option value="Dota 2">Dota 2</option>
-                                    <option value="Fall Guys">Fall Guys</option>
-                                    <option value="Free Fire">Free Fire</option>
-                                    <option value="Genshin Impact">Genshin Impact</option>
-                                    <option value="League of Legends">League of Legends</option>
-                                    <option value="Mobile Legends">Mobile Legends</option>
-                                    <option value="Point Blank">Point Blank</option>
-                                    <option value="Pokémon Unite">Pokémon Unite</option>
-                                    <option value="PUBG Mobile">PUBG Mobile</option>
-                                    <option value="Valorant">Valorant</option>
-                                  </select>
-                            </div>
-                            <div class="mb-3">
-                                <select class="form-select" id="price" name="price">
-                                    <option selected hidden>-- Choose a unit price --</option>
-                                    <option value="10000">10k/match</option>
-                                    <option value="20000">20k/match</option>
-                                    <option value="30000">30k/match</option>
-                                    <option value="40000">40k/30min</option>
-                                    <option value="50000">50k/30min</option>
-                                    <option value="60000">60k/hour</option>
-                                    <option value="80000">80k/hour</option>
-                                    <option value="100000">100k/hour</option>
-                                  </select>
-                            </div>
-                            <div class="mb-3 mt-5">
-                                <a href="#" class="btn btn-dark form-control ">APPLY</a>
-                            </div>
-                            <div class="mb-3">
-                                <a href="#" class="btn btn-outline-dark form-control "
-                                    onclick="toggle_regis_talent()">REGISTER AS CUSTOMER</a>
-                            </div>
-                            <p class="card-text text-center mb-4">Already have an account?<a href="#"
-                                    class="link-underline-primary mx-2">Log in</a></p>
-                        </div>
+        </div>
+        <div id="registalent-box" class="container col-xxl-9 p-3 my-4 visually-hidden">
+            <div class="d-flex align-items-center justify-content-center vh-100">
+                <!-- code here -->
+                <div class="card p-5" style="width: 28rem;">
+                    <h1 class="card-title text-center mb-4">Team Up</h1>
+                    <p class="card-text text-center fw-medium fs-5 text-secondary">Create your account</p>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="fullname-talent" placeholder="Fullname" required>
                     </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="username-talent" placeholder="Username" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password-talent" placeholder="Password" required>
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select" id="game" name="game">
+                            <option selected hidden>-- Choose a game --</option>
+                            <option value="Apex Legends">Apex Legends</option>
+                            <option value="Call of Duty Mobile">Call of Duty Mobile</option>
+                            <option value="Dota 2">Dota 2</option>
+                            <option value="Fall Guys">Fall Guys</option>
+                            <option value="Free Fire">Free Fire</option>
+                            <option value="Genshin Impact">Genshin Impact</option>
+                            <option value="League of Legends">League of Legends</option>
+                            <option value="Mobile Legends">Mobile Legends</option>
+                            <option value="Point Blank">Point Blank</option>
+                            <option value="Pokémon Unite">Pokémon Unite</option>
+                            <option value="PUBG Mobile">PUBG Mobile</option>
+                            <option value="Valorant">Valorant</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select" id="price" name="price">
+                            <option selected hidden>-- Choose a unit price --</option>
+                            <option value="10000">10k/match</option>
+                            <option value="20000">20k/match</option>
+                            <option value="30000">30k/match</option>
+                            <option value="40000">40k/30min</option>
+                            <option value="50000">50k/30min</option>
+                            <option value="60000">60k/hour</option>
+                            <option value="80000">80k/hour</option>
+                            <option value="100000">100k/hour</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 mt-5">
+                        <a href="#" class="btn btn-lg btn-dark form-control fw-semibold">APPLY</a>
+                    </div>
+                    <div class="mb-3">
+                        <a href="#" class="btn btn-lg btn-outline-dark form-control fw-semibold"
+                            onclick="toggle_regis_talent()">REGISTER
+                            AS CUSTOMER</a>
+                    </div>
+                    <p class="card-text text-center mb-4">Already have an account?<a href="/login"
+                            class="link-underline-primary mx-2">Log in</a></p>
+
                 </div>
             </div>
 
-        </div>
     </section>
 
     <!-- footer -->
