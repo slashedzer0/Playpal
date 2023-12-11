@@ -143,12 +143,19 @@ function login() {
       password: password,
     },
     success: function (response) {
-      console.log(response);
-      if (response["success"]) {
+      console.log(response)
+      if (response["result"] === "success") {
+        $.cookie("token", response["token"], { path: "/" });
         window.location.replace("/");
       } else {
-        $("#help").text("Invalid username or password").removeClass("invisible");
+        alert(response["msg"]);
       }
     },
   });
 }
+
+function sign_out() {
+  $.removeCookie("token", { path: "/" });
+  window.location.href = "/login";
+}
+

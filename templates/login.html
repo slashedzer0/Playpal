@@ -13,6 +13,7 @@
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
 
   <!-- google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,21 +69,22 @@
       <div class="card p-5" style="width: 28rem;">
         <h1 class="card-title text-center mb-4">Get Started</h1>
         <p class="card-text text-center fw-medium fs-5 text-secondary">Login to your account</p>
-        <form action="/api/check_login" method="GET">
-          <div class="mb-3">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-          </div>
-          <div class="mb-3">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-          </div>
-          <div id="help-login" class="text-danger invisible">
-            <!-- teks peringatan akan muncul disini -->
-            dummy text
-          </div>
-          <div class="mt-5 mb-3">
-            <input type="submit" value="LOGIN" class="btn btn-lg btn-dark form-control fw-semibold">
-          </div>
-        </form>
+        <!-- <form action="/api/check_login" method="GET"> -->
+        <div class="mb-3">
+          <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+        </div>
+        <div id="help-login" class="text-danger invisible">
+          <!-- teks peringatan akan muncul disini -->
+          dummy text
+        </div>
+        <div class="mt-5 mb-3">
+          <button value="LOGIN" class="btn btn-lg btn-dark form-control fw-semibold" onclick="login()">Login</button>
+          <!-- <input type="submit" value="LOGIN" class="btn btn-lg btn-dark form-control fw-semibold"> -->
+        </div>
+        <!-- </form> -->
         <p class="card-text text-center mb-4">Don't have an account?<a href="/register"
             class="link-underline-primary mx-2">Sign up</a></p>
       </div>
