@@ -1,6 +1,6 @@
-function toggle_regis_talent() {
-  $("#regiscustomer-box").toggleClass("visually-hidden");
-  $("#registalent-box").toggleClass("visually-hidden");
+function toggle_register_form() {
+  $("#form-customer").toggleClass("visually-hidden");
+  $("#form-talent").toggleClass("visually-hidden");
 }
 
 function register_customer() {
@@ -122,6 +122,8 @@ function register_talent() {
 }
 
 function login() {
+  $(document);
+
   let username = $("#username").val();
   let password = $("#password").val();
 
@@ -143,12 +145,15 @@ function login() {
       password: password,
     },
     success: function (response) {
-      console.log(response)
+      console.log(response);
       if (response["result"] === "success") {
         $.cookie("token", response["token"], { path: "/" });
         window.location.replace("/");
       } else {
-        alert(response["msg"]);
+        $("#help-login")
+          .text("Username not found or password wrong")
+          .removeClass("invisible");
+        $("#username").focus();
       }
     },
   });
@@ -156,6 +161,6 @@ function login() {
 
 function sign_out() {
   $.removeCookie("token", { path: "/" });
+  window.location.reload();
   window.location.href = "/login";
 }
-

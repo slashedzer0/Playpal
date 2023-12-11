@@ -13,6 +13,7 @@
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
 
   <!-- google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,8 +55,8 @@
           <li class="nav-item">
             <a class="nav-link active fw-semibold fs-5" href="/games">Games</a>
           </li>
-          <li class="nav-item visually-hidden" id="dashboard-navbar">
-            <a class="nav-link active fw-semibold fs-5" href="#">Dashboard</a>
+          <li class="nav-item">
+            <a id="dashboard-navbar" class="nav-link active fw-semibold fs-5" href="">Dashboard</a>
           </li>
         </ul>
         <div class="btn-group" id="profile-menu">
@@ -65,25 +66,34 @@
               loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
-                Settings</a>
-            </li>
-            <hr class="dropdown-divider">
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
-                Settings</a>
-            </li>
-            <hr class="dropdown-divider">
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete Account</a></li>
-            <li>
+            <div>
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
+                  Settings</a>
+              </li>
+            </div>
+            <div id="talent-settings">
               <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
-                Out</a>
-            </li>
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
+                  Settings</a>
+              </li>
+            </div>
+            <div>
+              <hr class="dropdown-divider">
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete Account</a>
+              </li>
+              <li>
+            </div>
+            <div>
+              <hr class="dropdown-divider">
+              </li>
+              <li><button class="dropdown-item" onclick="sign_out()"><i
+                    class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
+                  Out</button>
+              </li>
+            </div>
           </ul>
         </div>
 
@@ -321,6 +331,19 @@
     crossorigin="anonymous"></script>
 
   <!-- custom js -->
+  <script>
+    {% if user_info.role == 'customer' %}
+    $("#dashboard-navbar").attr("href", "/customer-summary")
+    $("#login-navbar").addClass('visually-hidden')
+    $("#talent-settings").addClass('visually-hidden')
+    {% elif user_info.role == 'talent' %}
+    $("#dashboard-navbar").attr("href", "/talent-summary")
+    $("#login-navbar").addClass('visually-hidden')
+    {% else %}
+    $("#dashboard-navbar").addClass('visually-hidden')
+    $("#profile-menu").addClass('visually-hidden')
+    {% endif %}
+  </script>
   <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 

@@ -13,6 +13,7 @@
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
 
   <!-- google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,8 +55,8 @@
           <li class="nav-item">
             <a class="nav-link active fw-semibold fs-5" href="/games">Games</a>
           </li>
-          <li class="nav-item visually-hidden" id="dashboard-navbar">
-            <a class="nav-link active fw-semibold fs-5" href="#">Dashboard</a>
+          <li class="nav-item">
+            <a id="dashboard-navbar" class="nav-link active fw-semibold fs-5" href="">Dashboard</a>
           </li>
         </ul>
         <div class="btn-group" id="profile-menu">
@@ -65,25 +66,34 @@
               loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
-                Settings</a>
-            </li>
-            <hr class="dropdown-divider">
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
-                Settings</a>
-            </li>
-            <hr class="dropdown-divider">
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete Account</a></li>
-            <li>
+            <div>
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
+                  Settings</a>
+              </li>
+            </div>
+            <div id="talent-settings">
               <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
-                Out</a>
-            </li>
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
+                  Settings</a>
+              </li>
+            </div>
+            <div>
+              <hr class="dropdown-divider">
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete Account</a>
+              </li>
+              <li>
+            </div>
+            <div>
+              <hr class="dropdown-divider">
+              </li>
+              <li><button class="dropdown-item" onclick="sign_out()"><i
+                    class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
+                  Out</button>
+              </li>
+            </div>
           </ul>
         </div>
 
@@ -217,45 +227,45 @@
   </div>
 
   <!-- content -->
-    <div class="container col-xxl-9 p-3 my-4">
-      <!-- code here -->
-      <div class="d-flex align-items-center justify-content-center vh-100">
-        <div class="card p-5">
-          <div class="row flex-lg-row justify-content-lg-start justify-content-center align-items-end">
-            <div class="col-md-3 col-sm-12 text-center">
-              <img src="/static/img/profiles/profile-pic.jpg" alt="avatar" class="rounded-circle me-md-5" width="128"
-                height="128">
-            </div>
-            <div class="col-md-9 col-sm-12 text-center text-md-start">
-              <p class="card-title fs-2 fw-semibold mt-sm-2">Michael Wazowski</p>
-              <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-gamepad-modern"></i>&nbsp;Apex Legends
-              </p>
-              <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-circle-dollar"></i>&nbsp;20k/match</p>
-              <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-star"></i>&nbsp;4.7</p>
-            </div>
+  <div class="container col-xxl-9 p-3 my-4">
+    <!-- code here -->
+    <div class="d-flex align-items-center justify-content-center vh-100">
+      <div class="card p-5">
+        <div class="row flex-lg-row justify-content-lg-start justify-content-center align-items-end">
+          <div class="col-md-3 col-sm-12 text-center">
+            <img src="/static/img/profiles/profile-pic.jpg" alt="avatar" class="rounded-circle me-md-5" width="128"
+              height="128">
           </div>
+          <div class="col-md-9 col-sm-12 text-center text-md-start">
+            <p class="card-title fs-2 fw-semibold mt-sm-2">Michael Wazowski</p>
+            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-gamepad-modern"></i>&nbsp;Apex Legends
+            </p>
+            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-circle-dollar"></i>&nbsp;20k/match</p>
+            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-star"></i>&nbsp;4.7</p>
+          </div>
+        </div>
 
-          <div class="card my-5">
-            <div class="card-body">
-              <ul class="list-group list-group-flush px-2">
-                <li class="list-group-item">Rank/Level &nbsp;&nbsp;&nbsp;: Diamond IV</li>
-                <li class="list-group-item">Played Since : 2021</li>
-                <li class="list-group-item">Region &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: US,
-                  Europe
-                </li>
-                <li class="list-group-item">Platform &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PC</li>
-              </ul>
-            </div>
+        <div class="card my-5">
+          <div class="card-body">
+            <ul class="list-group list-group-flush px-2">
+              <li class="list-group-item">Rank/Level &nbsp;&nbsp;&nbsp;: Diamond IV</li>
+              <li class="list-group-item">Played Since : 2021</li>
+              <li class="list-group-item">Region &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: US,
+                Europe
+              </li>
+              <li class="list-group-item">Platform &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PC</li>
+            </ul>
           </div>
-          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a class="btn btn-dark btn-lg px-5 shadow-sm fw-semibold" data-bs-toggle="modal"
-              data-bs-target="#modal-order">
-              ORDER
-            </a>
-          </div>
+        </div>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a id="create-order" class="btn btn-dark btn-lg px-5 shadow-sm fw-semibold" data-bs-toggle="modal"
+            data-bs-target="#modal-order" onclick="create_order()">
+            ORDER
+          </a>
         </div>
       </div>
     </div>
+  </div>
 
   <!-- order modal -->
   <div id="modal-order" class="modal fade" tabindex="-1" aria-hidden="true">
@@ -321,6 +331,28 @@
     crossorigin="anonymous"></script>
 
   <!-- custom js -->
+  <script>
+    {% if user_info.role == 'customer' %}
+    $("#dashboard-navbar").attr("href", "/customer-summary")
+    $("#login-navbar").addClass('visually-hidden')
+    $("#talent-settings").addClass('visually-hidden')
+    {% elif user_info.role == 'talent' %}
+    $("#dashboard-navbar").attr("href", "/talent-summary")
+    $("#login-navbar").addClass('visually-hidden')
+    {% else %}
+    $("#dashboard-navbar").addClass('visually-hidden')
+    $("#profile-menu").addClass('visually-hidden')
+    {% endif %}
+
+    function create_order() {
+      {% set customer = user_info.role == 'customer' %}
+
+      {% if not customer %}
+      window.location.reload()
+      window.location.href = '/login'
+      {% endif %}
+    }
+  </script>
   <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 

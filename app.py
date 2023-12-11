@@ -25,66 +25,221 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     token = request.cookies.get("token")
-    status = db.users.find_one({"role":})
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        user_info = db.users.find_one({"username": payload["username"]})
-        return render_template("index.html", user_info=user_info)
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="Token Anda telah kedaluwarsa"))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="Ada masalah saat Anda login"))
-    # return render_template('index.html')
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    return render_template("index.html", user_info=user_info)
 
 
 @app.route('/register')
-def register():
-    return render_template('register.html')
+def register_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+
+            if user_info:
+                return redirect(url_for("home"))
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    return render_template("register.html", user_info=user_info)
 
 
 @app.route('/login')
-def login():
-    return render_template('login.html')
+def login_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+
+            if user_info:
+                return redirect(url_for("home"))
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    return render_template("login.html", user_info=user_info)
 
 
 @app.route('/profile')
-def profile():
-    return render_template('profile.html')
+def profile_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    return render_template("profile.html", user_info=user_info)
 
 
 @app.route('/talents')
-def talents():
-    return render_template('talents.html')
+def talents_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    return render_template("talents.html", user_info=user_info)
 
 
 @app.route('/games')
-def games():
-    return render_template('games.html')
+def games_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    return render_template("games.html", user_info=user_info)
 
 
 @app.route('/customer-summary')
-def customer_summary():
-    return render_template('/customer/summary.html')
+def customer_summary_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+
+            if user_info.get("role") != "customer":
+                return redirect(url_for("home"))
+            return render_template('/customer/summary.html', user_info=user_info)
+
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for("login_page"))
+
+    return redirect(url_for("home"))
 
 
 @app.route('/customer-history')
-def customer_history():
-    return render_template('/customer/history.html')
+def customer_history_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+
+            if user_info.get("role") != "customer":
+                return redirect(url_for("home"))
+            return render_template('/customer/history.html', user_info=user_info)
+
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    else:
+        return redirect(url_for("home"))
 
 
 @app.route('/talent-summary')
-def talent_summary():
-    return render_template('/talent/summary.html')
+def talent_summary_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+
+            if user_info.get("role") != "talent":
+                return redirect(url_for("home"))
+            return render_template('/talent/summary.html', user_info=user_info)
+
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    else:
+        return redirect(url_for("home"))
 
 
 @app.route('/talent-history')
-def talent_history():
-    return render_template('/talent/history.html')
+def talent_history_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+
+            if user_info.get("role") != "talent":
+                return redirect(url_for("home"))
+            return render_template('/talent/history.html', user_info=user_info)
+
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    else:
+        return redirect(url_for("home"))
 
 
 @app.route('/talent-orders')
-def talent_orders():
-    return render_template('/talent/orders.html')
+def talent_orders_page():
+    token = request.cookies.get("token")
+    user_info = None
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+
+            if user_info.get("role") != "talent":
+                return redirect(url_for("home"))
+            return render_template('/talent/orders.html', user_info=user_info)
+
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
+
+    else:
+        return redirect(url_for("home"))
 
 
 @app.route('/api/register_customer', methods=['POST'])
@@ -93,10 +248,12 @@ def register_customer():
     username = request.form['username']
     password = request.form['password']
     exists = bool(db.users.find_one({"username": username}))
+
     if exists:
         return jsonify({'result': 'failed', 'exists': exists})
-    password_hash = hashlib.sha256(
-        password.encode('utf-8')).hexdigest()
+
+    password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
     doc = {
         "fullname": fullname,
         "username": username,
@@ -105,6 +262,7 @@ def register_customer():
         "pfp_default": "img/profiles/profile-pic.jpg",
         "role": "customer",
     }
+
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
@@ -117,10 +275,12 @@ def register_talent():
     game = request.form['game']
     price = request.form['price']
     exists = bool(db.users.find_one({"username": username}))
+
     if exists:
         return jsonify({'result': 'failed', 'exists': exists})
-    password_hash = hashlib.sha256(
-        password.encode('utf-8')).hexdigest()
+
+    password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
     doc = {
         "fullname": fullname,
         "username": username,
@@ -131,40 +291,36 @@ def register_talent():
         "pfp_default": "img/profiles/profile-pic.jpg",
         "role": "talent",
     }
+
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
+
 @app.route("/api/login", methods=["POST"])
-def login_backend():
+def login_process():
     username = request.form["username"]
     password = request.form["password"]
     password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+
     result = db.users.find_one(
         {
             "username": username,
             "password": password_hash,
         }
     )
+
     if result:
         payload = {
             "username": username,
             "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-        return jsonify(
-            {
-                "result": "success",
-                "token": token,
-            }
-        )
+        token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        return jsonify({"result": "success", "token": token})
+
     else:
-        return jsonify(
-            {
-                "result": "fail",
-                "msg": "Kami tidak dapat menemukan pengguna dengan kombinasi id/kata sandi tersebut",
-            }
-        )
+        return redirect(url_for("login_page"))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
