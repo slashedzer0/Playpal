@@ -55,36 +55,45 @@
           <li class="nav-item">
             <a class="nav-link active fw-semibold fs-5" href="/games">Games</a>
           </li>
-          <li class="nav-item visually-hidden" id="dashboard-navbar">
-            <a class="nav-link active fw-semibold fs-5" href="#">Dashboard</a>
+          <li class="nav-item">
+            <a id="dashboard-navbar" class="nav-link active fw-semibold fs-5" href="">Dashboard</a>
           </li>
         </ul>
         <div class="btn-group" id="profile-menu">
           <button type="button" class="btn btn-outline-link fw-semibold" data-bs-toggle="dropdown"
             aria-expanded="false">
-            <img src="/static/img/profiles/profile-pic.jpg" class="rounded-circle" width="30" height="30"
+            <img src="{{ url_for('static', filename=user_info.pfp_default) }}" class="rounded-circle" width="30" height="30"
               loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
-                Settings</a>
-            </li>
-            <hr class="dropdown-divider">
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
-                Settings</a>
-            </li>
-            <hr class="dropdown-divider">
-            <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete Account</a></li>
-            <li>
+            <div>
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-account"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Account
+                  Settings</a>
+              </li>
+            </div>
+            <div id="talent-settings">
               <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
-                Out</a>
-            </li>
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-talent"><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Talent
+                  Settings</a>
+              </li>
+            </div>
+            <div>
+              <hr class="dropdown-divider">
+              <li style="cursor: pointer;"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#modal-delete"><i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Delete Account</a>
+              </li>
+              <li>
+            </div>
+            <div>
+              <hr class="dropdown-divider">
+              </li>
+              <li><button class="dropdown-item" onclick="sign_out()"><i
+                    class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;Sign
+                  Out</button>
+              </li>
+            </div>
           </ul>
         </div>
 
@@ -98,30 +107,30 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content w-75 mx-auto p-2">
         <div class="modal-header flex-column border-0">
-          <img src="/static/img/profiles/profile-pic.jpg" class="rounded-circle" width="100" height="100"
-            loading="lazy" />
-          <h4 class="modal-title fw-semibold text-center mt-2">John Doe</h4>
+          <img src="{{ url_for('static', filename=user_info.pfp_default) }}" class="rounded-circle" width="100"
+            height="100" loading="lazy" />
+          <h4 class="modal-title fw-semibold text-center mt-2">{{ user_info.fullname }}</h4>
         </div>
         <div class="modal-body border-0 px-3 py-0">
-          <form action="/api/update_account" method="POST">
-            <div class="mb-3">
-              <label for="fullname" class="form-label fw-semibold">Full name</label>
-              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="New name">
-            </div>
-            <div class="mb-3">
-              <label for="username" class="form-label fw-semibold">Username</label>
-              <input type="text" class="form-control" id="username" name="username" placeholder="New username">
-            </div>
-            <div class="mb-3">
-              <label for="avatar" class="form-label fw-semibold">Profile picture</label>
-              <input class="form-control" type="file" id="avatar" name="avatar" accept="image/*">
-            </div>
+          <div class="mb-3">
+            <label for="fullname" class="form-label fw-semibold">Full name</label>
+            <input type="text" class="form-control" id="fullname" placeholder="New name"
+              value="{{ user_info.fullname }}">
+          </div>
+          <div class="mb-3">
+            <label for="username" class="form-label fw-semibold">Username</label>
+            <input type="text" class="form-control" id="username" placeholder="New username"
+              value="{{ user_info.username }}">
+          </div>
+          <div class="mb-3">
+            <label for="avatar" class="form-label fw-semibold">Profile picture</label>
+            <input class="form-control" type="file" id="avatar" accept="image/*" value="{{ user_info.pfp_default }}">
+          </div>
         </div>
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <input type="submit" value="SAVE CHANGES" class="btn btn-dark">
+          <button class="btn btn-dark" onclick="update_account()">SAVE CHANGES</button>
         </div>
-        </form>
       </div>
     </div>
   </div>
@@ -211,7 +220,7 @@
         </div>
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <button type="button" class="btn btn-danger">CONFIRM</button>
+          <button type="button" class="btn btn-danger" onclick="delete_account()">CONFIRM</button>
         </div>
       </div>
     </div>
@@ -277,6 +286,19 @@
       crossorigin="anonymous"></script>
 
     <!-- custom js -->
+    <script>
+      {% if user_info.role == 'customer' %}
+      $("#dashboard-navbar").attr("href", "/customer-summary")
+      $("#login-navbar").addClass('visually-hidden')
+      $("#talent-settings").addClass('visually-hidden')
+      {% elif user_info.role == 'talent' %}
+      $("#dashboard-navbar").attr("href", "/talent-summary")
+      $("#login-navbar").addClass('visually-hidden')
+      {% else %}
+      $("#dashboard-navbar").addClass('visually-hidden')
+      $("#profile-menu").addClass('visually-hidden')
+      {% endif %}
+    </script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 

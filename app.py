@@ -297,7 +297,7 @@ def register_talent():
 
 
 @app.route("/api/login", methods=["POST"])
-def login_process():
+def login_verification():
     username = request.form["username"]
     password = request.form["password"]
     password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
@@ -320,6 +320,54 @@ def login_process():
 
     else:
         return redirect(url_for("login_page"))
+
+
+@app.route('/api/update_account', methods=['POST'])
+def update_account():
+    token = request.cookies.get('token')
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        username = payload['username']
+        new_fullname = request.form['fullname']
+        new_username = request.form['username']
+        new_doc = {'fullname': new_fullname, 'username': new_username}
+
+        if 'avatar' in request.files:
+            avatar = request.files['avatar']
+            filename = secure_filename(avatar.filename)
+            extension = filename.split('.')[-1]
+            file_path = f'img/profiles/{new_username}.{extension}'
+            avatar.save('./static/' + file_path)
+            new_doc['pfp_new'] = filename
+            new_doc['pfp_default'] = file_path
+
+        payload['username'] = new_username
+        new_token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        db.users.update_one({'username': username}, {'$set': new_doc})
+
+        response = jsonify({'result': 'success'})
+        response.set_cookie('token', new_token)
+        return response
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('home'))
+
+
+@app.route('/api/delete_account', methods=['POST'])
+def delete_account():
+    token = request.cookies.get('token')
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.users.find_one({"username": payload["username"]})
+            db.users.delete_one({"username": user_info["username"]})
+            return jsonify({'result': 'success'})
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login_page"))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login_page"))
 
 
 if __name__ == '__main__':

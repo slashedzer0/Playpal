@@ -62,8 +62,8 @@
         <div class="btn-group" id="profile-menu">
           <button type="button" class="btn btn-outline-link fw-semibold" data-bs-toggle="dropdown"
             aria-expanded="false">
-            <img src="/static/img/profiles/profile-pic.jpg" class="rounded-circle" width="30" height="30"
-              loading="lazy" />
+            <img src="{{ url_for('static', filename=user_info.pfp_default) }}" class="rounded-circle" width="30"
+              height="30" loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <div>
@@ -112,25 +112,25 @@
           <h4 class="modal-title fw-semibold text-center mt-2">{{ user_info.fullname }}</h4>
         </div>
         <div class="modal-body border-0 px-3 py-0">
-          <form action="/api/update_account" method="POST">
-            <div class="mb-3">
-              <label for="fullname" class="form-label fw-semibold">Full name</label>
-              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="New name">
-            </div>
-            <div class="mb-3">
-              <label for="username" class="form-label fw-semibold">Username</label>
-              <input type="text" class="form-control" id="username" name="username" placeholder="New username">
-            </div>
-            <div class="mb-3">
-              <label for="avatar" class="form-label fw-semibold">Profile picture</label>
-              <input class="form-control" type="file" id="avatar" name="avatar" accept="image/*">
-            </div>
+          <div class="mb-3">
+            <label for="fullname" class="form-label fw-semibold">Full name</label>
+            <input type="text" class="form-control" id="fullname" placeholder="New name"
+              value="{{ user_info.fullname }}">
+          </div>
+          <div class="mb-3">
+            <label for="username" class="form-label fw-semibold">Username</label>
+            <input type="text" class="form-control" id="username" placeholder="New username"
+              value="{{ user_info.username }}">
+          </div>
+          <div class="mb-3">
+            <label for="avatar" class="form-label fw-semibold">Profile picture</label>
+            <input class="form-control" type="file" id="avatar" accept="image/*" value="{{ user_info.pfp_default }}">
+          </div>
         </div>
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <input type="submit" value="SAVE CHANGES" class="btn btn-dark">
+          <button class="btn btn-dark" onclick="update_account()">SAVE CHANGES</button>
         </div>
-        </form>
       </div>
     </div>
   </div>
@@ -220,7 +220,7 @@
         </div>
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <button type="button" class="btn btn-danger">CONFIRM</button>
+          <button type="button" class="btn btn-danger" onclick="delete_account()">CONFIRM</button>
         </div>
       </div>
     </div>
