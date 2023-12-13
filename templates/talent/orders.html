@@ -143,67 +143,67 @@
           <h4 class="modal-title fw-semibold text-center mt-2">Talent Settings</h4>
         </div>
         <div class="modal-body border-0 px-3 py-0">
-          <form action="/api/update_talent" method="POST">
-            <div class="mb-3">
-              <label for="game" class="form-label fw-semibold">Game</label>
-              <select class="form-select" id="game" name="game">
-                <option selected hidden>-- Choose a game --</option>
-                <option value="Apex Legends">Apex Legends</option>
-                <option value="Call of Duty Mobile">Call of Duty Mobile</option>
-                <option value="Dota 2">Dota 2</option>
-                <option value="Fall Guys">Fall Guys</option>
-                <option value="Free Fire">Free Fire</option>
-                <option value="Genshin Impact">Genshin Impact</option>
-                <option value="League of Legends">League of Legends</option>
-                <option value="Mobile Legends">Mobile Legends</option>
-                <option value="Point Blank">Point Blank</option>
-                <option value="Pokémon Unite">Pokémon Unite</option>
-                <option value="PUBG Mobile">PUBG Mobile</option>
-                <option value="Valorant">Valorant</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="price" class="form-label fw-semibold">Unit price</label>
-              <select class="form-select" id="price" name="price">
-                <option selected hidden>-- Choose a unit price --</option>
-                <option value="10000">10k/match</option>
-                <option value="20000">20k/match</option>
-                <option value="30000">30k/match</option>
-                <option value="40000">40k/30min</option>
-                <option value="50000">50k/30min</option>
-                <option value="60000">60k/hour</option>
-                <option value="80000">80k/hour</option>
-                <option value="100000">100k/hour</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="rank" class="form-label fw-semibold">Rank</label>
-              <input type="text" class="form-control" id="rank" name="rank" placeholder="Your in-game rank">
-            </div>
-            <div class="mb-3">
-              <label for="since" class="form-label fw-semibold">Played since</label>
-              <input type="number" class="form-control" id="since" name="since" placeholder="The first year you played"
-                min="2000" max="9999">
-            </div>
-            <div class="mb-3">
-              <label for="region" class="form-label fw-semibold">Region</label>
-              <input type="text" class="form-control" id="region" name="region" placeholder="Your region">
-            </div>
-            <div class="mb-3">
-              <label for="platform" class="form-label fw-semibold">Platform</label>
-              <select class="form-select" id="platform" name="platform">
-                <option selected hidden>-- Choose a platform --</option>
-                <option value="PC">PC</option>
-                <option value="Mobile">Mobile</option>
-                <option value="Console">Console</option>
-              </select>
-            </div>
+          <div class="mb-3">
+            <label for="game" class="form-label fw-semibold">Game</label>
+            <select class="form-select" id="game">
+              <option selected hidden value="{{ user_info.game }}">{{ user_info.game }}</option>
+              <option value="Apex Legends">Apex Legends</option>
+              <option value="Call of Duty Mobile">Call of Duty Mobile</option>
+              <option value="Dota 2">Dota 2</option>
+              <option value="Fall Guys">Fall Guys</option>
+              <option value="Free Fire">Free Fire</option>
+              <option value="Genshin Impact">Genshin Impact</option>
+              <option value="League of Legends">League of Legends</option>
+              <option value="Mobile Legends">Mobile Legends</option>
+              <option value="Point Blank">Point Blank</option>
+              <option value="Pokémon Unite">Pokémon Unite</option>
+              <option value="PUBG Mobile">PUBG Mobile</option>
+              <option value="Valorant">Valorant</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label fw-semibold">Unit price</label>
+            <select class="form-select" id="price">
+              <option selected hidden value="{{ user_info.price }}">{{ user_info.unit }}</option>
+              <option value="10000">10k/match</option>
+              <option value="20000">20k/match</option>
+              <option value="30000">30k/match</option>
+              <option value="40000">40k/30min</option>
+              <option value="50000">50k/30min</option>
+              <option value="60000">60k/hour</option>
+              <option value="80000">80k/hour</option>
+              <option value="100000">100k/hour</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="rank" class="form-label fw-semibold">Rank</label>
+            <input type="text" class="form-control" id="rank" placeholder="Your in-game rank"
+              value="{{ user_info.rank }}">
+          </div>
+          <div class="mb-3">
+            <label for="since" class="form-label fw-semibold">Played since</label>
+            <input type="number" class="form-control" id="since" placeholder="The first year you played" min="2000"
+              max="9999" value="{{ user_info.since }}">
+          </div>
+          <div class="mb-3">
+            <label for="region" class="form-label fw-semibold">Region</label>
+            <input type="text" class="form-control" id="region" placeholder="Your region"
+              value="{{ user_info.region }}">
+          </div>
+          <div class="mb-3">
+            <label for="platform" class="form-label fw-semibold">Platform</label>
+            <select class="form-select" id="platform">
+              <option selected hidden value="{{ user_info.platform }}">{{ user_info.platform }}</option>
+              <option value="PC">PC</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Console">Console</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <input type="submit" value="SAVE CHANGES" class="btn btn-dark">
+          <button class="btn btn-dark" onclick="update_talent()">SAVE CHANGES</button>
         </div>
-        </form>
       </div>
     </div>
   </div>

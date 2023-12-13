@@ -6,6 +6,7 @@ from pymongo import MongoClient
 import jwt
 import datetime
 import hashlib
+import random
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
@@ -20,12 +21,17 @@ DB_NAME = os.environ.get("DB_NAME")
 client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["UPLOAD_FOLDER"] = "./static/img/profiles"
 
 
 @app.route('/')
 def home():
     token = request.cookies.get("token")
     user_info = None
+    talents = list(db.users.find({'role': 'talent'}, {
+                   '_id': False, 'password': False}))
+    shuffled_talents = random.sample(talents, 6)
 
     if token:
         try:
@@ -36,7 +42,7 @@ def home():
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
 
-    return render_template("index.html", user_info=user_info)
+    return render_template("index.html", user_info=user_info, talents=shuffled_talents)
 
 
 @app.route('/register')
@@ -79,10 +85,11 @@ def login_page():
     return render_template("login.html", user_info=user_info)
 
 
-@app.route('/profile')
-def profile_page():
+@app.route('/profile/<username>')
+def profile_page(username):
     token = request.cookies.get("token")
     user_info = None
+    talent_info = db.users.find_one({"username": username})
 
     if token:
         try:
@@ -93,7 +100,7 @@ def profile_page():
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
 
-    return render_template("profile.html", user_info=user_info)
+    return render_template("profile.html", user_info=user_info, talent_info=talent_info)
 
 
 @app.route('/talents')
@@ -117,6 +124,8 @@ def talents_page():
 def games_page():
     token = request.cookies.get("token")
     user_info = None
+    talents = list(db.users.find({'role': 'talent'}, {
+                   '_id': False, 'password': False}))
 
     if token:
         try:
@@ -127,7 +136,7 @@ def games_page():
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
 
-    return render_template("games.html", user_info=user_info)
+    return render_template("games.html", user_info=user_info, talents=talents)
 
 
 @app.route('/customer-summary')
@@ -274,6 +283,7 @@ def register_talent():
     password = request.form['password']
     game = request.form['game']
     price = request.form['price']
+    unit = request.form['unit']
     exists = bool(db.users.find_one({"username": username}))
 
     if exists:
@@ -287,6 +297,7 @@ def register_talent():
         "password": password_hash,
         "game": game,
         "price": price,
+        "unit": unit,
         "pfp_new": "",
         "pfp_default": "img/profiles/profile-pic.jpg",
         "role": "talent",
@@ -354,6 +365,38 @@ def update_account():
         return redirect(url_for('home'))
 
 
+@app.route('/api/update_talent', methods=['POST'])
+def update_talent():
+    token = request.cookies.get('token')
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        username = payload['username']
+        new_game = request.form['game']
+        new_price = request.form['price']
+        new_unit = request.form['unit']
+        rank = request.form['rank']
+        since = request.form['since']
+        region = request.form['region']
+        platform = request.form['platform']
+
+        new_doc = {
+            "game": new_game,
+            "price": new_price,
+            "unit": new_unit,
+            "rank": rank,
+            "since": since,
+            "region": region,
+            "platform": platform,
+        }
+
+        db.users.update_one({'username': username}, {'$set': new_doc})
+        return jsonify({'result': 'success'})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for('home'))
+
+
 @app.route('/api/delete_account', methods=['POST'])
 def delete_account():
     token = request.cookies.get('token')
@@ -368,6 +411,13 @@ def delete_account():
             return redirect(url_for("login_page"))
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
+
+
+@app.route('/api/load_talents')
+def load_talents():
+    talents = list(db.users.find({'role': 'talent'}, {
+                   '_id': False, 'password': False}))
+    return jsonify({'result': 'success', 'talents': talents})
 
 
 if __name__ == '__main__':

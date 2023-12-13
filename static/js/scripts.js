@@ -64,6 +64,7 @@ function register_talent() {
   let password = $("#password-talent").val();
   let game = $("#game").val();
   let price = $("#price").val();
+  let unit = $("#price").find(":selected").text();
 
   if (fullname === "") {
     $("#help-talent").text("Please type in fullname").removeClass("invisible");
@@ -106,6 +107,7 @@ function register_talent() {
       password: password,
       game: game,
       price: price,
+      unit: unit,
     },
     success: function (response) {
       exists = response["exists"];
@@ -202,6 +204,72 @@ function update_account() {
       console.log(response);
       if (response["result"] === "success") {
         window.location.reload();
+      }
+    },
+  });
+}
+
+function update_talent() {
+  let game = $("#game").val();
+  let price = $("#price").val();
+  let unit = $("#price").find(":selected").text();
+  let rank = $("#rank").val();
+  let since = $("#since").val();
+  let region = $("#region").val();
+  let platform = $("#platform").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/api/update_talent",
+    data: {
+      game: game,
+      price: price,
+      unit: unit,
+      rank: rank,
+      since: since,
+      region: region,
+      platform: platform,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        window.location.reload();
+      }
+    },
+  });
+}
+
+function load_talents() {
+  $.ajax({
+    type: "GET",
+    url: "/api/load_talents",
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        talents = response["talents"];
+        talents.sort((a, b) => a.fullname.localeCompare(b.fullname));
+
+        for (let i = 0; i < talents.length; i++) {
+          let talent = talents[i];
+          let username = talent.username;
+          let fullname = talent.fullname;
+          let avatar = talent.pfp_default;
+          let temp_html = `
+          <div class="col mb-2">
+          <div class="card">
+            <a href="/profile/${username}">
+              <img src="/static/${avatar}" class="card-img">
+              <div class="card-img-overlay p-2">
+                <p class="fs-6 badge bg-secondary bg-opacity-50"><i class="fa-solid fa-star"
+                    style="color: #fcbe3f;"></i>&nbsp;X.X</p>
+              </div>
+            </a>
+          </div>
+          <p class="mt-2 fs-5 fw-semibold lh-sm">${fullname}</p>
+        </div>
+          `;
+          $("#list-talents").append(temp_html);
+        }
       }
     },
   });

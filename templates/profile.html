@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Playpal // Michael Wazowski</title>
+  <title>Playpal // {{ talent_info.fullname }}</title>
 
   <!-- bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -143,158 +143,67 @@
           <h4 class="modal-title fw-semibold text-center mt-2">Talent Settings</h4>
         </div>
         <div class="modal-body border-0 px-3 py-0">
-          <form action="/api/update_talent" method="POST">
-            <div class="mb-3">
-              <label for="game" class="form-label fw-semibold">Game</label>
-              <select class="form-select" id="game" name="game">
-                <option selected hidden>-- Choose a game --</option>
-                <option value="Apex Legends">Apex Legends</option>
-                <option value="Call of Duty Mobile">Call of Duty Mobile</option>
-                <option value="Dota 2">Dota 2</option>
-                <option value="Fall Guys">Fall Guys</option>
-                <option value="Free Fire">Free Fire</option>
-                <option value="Genshin Impact">Genshin Impact</option>
-                <option value="League of Legends">League of Legends</option>
-                <option value="Mobile Legends">Mobile Legends</option>
-                <option value="Point Blank">Point Blank</option>
-                <option value="Pokémon Unite">Pokémon Unite</option>
-                <option value="PUBG Mobile">PUBG Mobile</option>
-                <option value="Valorant">Valorant</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="price" class="form-label fw-semibold">Unit price</label>
-              <select class="form-select" id="price" name="price">
-                <option selected hidden>-- Choose a unit price --</option>
-                <option value="10000">10k/match</option>
-                <option value="20000">20k/match</option>
-                <option value="30000">30k/match</option>
-                <option value="40000">40k/30min</option>
-                <option value="50000">50k/30min</option>
-                <option value="60000">60k/hour</option>
-                <option value="80000">80k/hour</option>
-                <option value="100000">100k/hour</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="rank" class="form-label fw-semibold">Rank</label>
-              <input type="text" class="form-control" id="rank" name="rank" placeholder="Your in-game rank">
-            </div>
-            <div class="mb-3">
-              <label for="since" class="form-label fw-semibold">Played since</label>
-              <input type="number" class="form-control" id="since" name="since" placeholder="The first year you played"
-                min="2000" max="9999">
-            </div>
-            <div class="mb-3">
-              <label for="region" class="form-label fw-semibold">Region</label>
-              <input type="text" class="form-control" id="region" name="region" placeholder="Your region">
-            </div>
-            <div class="mb-3">
-              <label for="platform" class="form-label fw-semibold">Platform</label>
-              <select class="form-select" id="platform" name="platform">
-                <option selected hidden>-- Choose a platform --</option>
-                <option value="PC">PC</option>
-                <option value="Mobile">Mobile</option>
-                <option value="Console">Console</option>
-              </select>
-            </div>
+          <div class="mb-3">
+            <label for="game" class="form-label fw-semibold">Game</label>
+            <select class="form-select" id="game">
+              <option selected hidden value="{{ user_info.game }}">{{ user_info.game }}</option>
+              <option value="Apex Legends">Apex Legends</option>
+              <option value="Call of Duty Mobile">Call of Duty Mobile</option>
+              <option value="Dota 2">Dota 2</option>
+              <option value="Fall Guys">Fall Guys</option>
+              <option value="Free Fire">Free Fire</option>
+              <option value="Genshin Impact">Genshin Impact</option>
+              <option value="League of Legends">League of Legends</option>
+              <option value="Mobile Legends">Mobile Legends</option>
+              <option value="Point Blank">Point Blank</option>
+              <option value="Pokémon Unite">Pokémon Unite</option>
+              <option value="PUBG Mobile">PUBG Mobile</option>
+              <option value="Valorant">Valorant</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label fw-semibold">Unit price</label>
+            <select class="form-select" id="price">
+              <option selected hidden value="{{ user_info.price }}">{{ user_info.unit }}</option>
+              <option value="10000">10k/match</option>
+              <option value="20000">20k/match</option>
+              <option value="30000">30k/match</option>
+              <option value="40000">40k/30min</option>
+              <option value="50000">50k/30min</option>
+              <option value="60000">60k/hour</option>
+              <option value="80000">80k/hour</option>
+              <option value="100000">100k/hour</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="rank" class="form-label fw-semibold">Rank</label>
+            <input type="text" class="form-control" id="rank" placeholder="Your in-game rank"
+              value="{{ user_info.rank }}">
+          </div>
+          <div class="mb-3">
+            <label for="since" class="form-label fw-semibold">Played since</label>
+            <input type="number" class="form-control" id="since" placeholder="The first year you played" min="2000"
+              max="9999" value="{{ user_info.since }}">
+          </div>
+          <div class="mb-3">
+            <label for="region" class="form-label fw-semibold">Region</label>
+            <input type="text" class="form-control" id="region" placeholder="Your region"
+              value="{{ user_info.region }}">
+          </div>
+          <div class="mb-3">
+            <label for="platform" class="form-label fw-semibold">Platform</label>
+            <select class="form-select" id="platform">
+              <option selected hidden value="{{ user_info.platform }}">{{ user_info.platform }}</option>
+              <option value="PC">PC</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Console">Console</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <input type="submit" value="SAVE CHANGES" class="btn btn-dark">
+          <button class="btn btn-dark" onclick="update_talent()">SAVE CHANGES</button>
         </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div id="modal-delete" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content w-75 mx-auto p-2">
-        <div class="modal-header flex-column border-0">
-          <img src="/static/img/question-mark.png" alt="question mark icon" loading="lazy">
-          <h4 class="modal-title fw-semibold text-center mt-2">Account Deletion</h4>
-        </div>
-        <div class="modal-body border-0 p-0">
-          <p class="text-center">Continue to delete your account? <br> This action cannot be undone.</p>
-        </div>
-        <div class="modal-footer border-0 justify-content-center">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <button type="button" class="btn btn-danger" onclick="delete_account()">CONFIRM</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="modal-talent" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content w-75 h-75 mx-auto p-2">
-        <div class="modal-header flex-column border-0">
-          <img src="/static/img/game-controller.png" alt="controller icon" loading="lazy">
-          <h4 class="modal-title fw-semibold text-center mt-2">Talent Settings</h4>
-        </div>
-        <div class="modal-body border-0 px-3 py-0">
-          <form action="/api/update_talent" method="POST">
-            <div class="mb-3">
-              <label for="game" class="form-label fw-semibold">Game</label>
-              <select class="form-select" id="game" name="game">
-                <option selected hidden>-- Choose a game --</option>
-                <option value="Apex Legends">Apex Legends</option>
-                <option value="Call of Duty Mobile">Call of Duty Mobile</option>
-                <option value="Dota 2">Dota 2</option>
-                <option value="Fall Guys">Fall Guys</option>
-                <option value="Free Fire">Free Fire</option>
-                <option value="Genshin Impact">Genshin Impact</option>
-                <option value="League of Legends">League of Legends</option>
-                <option value="Mobile Legends">Mobile Legends</option>
-                <option value="Point Blank">Point Blank</option>
-                <option value="Pokémon Unite">Pokémon Unite</option>
-                <option value="PUBG Mobile">PUBG Mobile</option>
-                <option value="Valorant">Valorant</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="price" class="form-label fw-semibold">Unit price</label>
-              <select class="form-select" id="price" name="price">
-                <option selected hidden>-- Choose a unit price --</option>
-                <option value="10000">10k/match</option>
-                <option value="20000">20k/match</option>
-                <option value="30000">30k/match</option>
-                <option value="40000">40k/30min</option>
-                <option value="50000">50k/30min</option>
-                <option value="60000">60k/hour</option>
-                <option value="80000">80k/hour</option>
-                <option value="100000">100k/hour</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="rank" class="form-label fw-semibold">Rank</label>
-              <input type="text" class="form-control" id="rank" name="rank" placeholder="Your in-game rank">
-            </div>
-            <div class="mb-3">
-              <label for="since" class="form-label fw-semibold">Played since</label>
-              <input type="number" class="form-control" id="since" name="since" placeholder="The first year you played"
-                min="2000" max="9999">
-            </div>
-            <div class="mb-3">
-              <label for="region" class="form-label fw-semibold">Region</label>
-              <input type="text" class="form-control" id="region" name="region" placeholder="Your region">
-            </div>
-            <div class="mb-3">
-              <label for="platform" class="form-label fw-semibold">Platform</label>
-              <select class="form-select" id="platform" name="platform">
-                <option selected hidden>-- Choose a platform --</option>
-                <option value="PC">PC</option>
-                <option value="Mobile">Mobile</option>
-                <option value="Console">Console</option>
-              </select>
-            </div>
-        </div>
-        <div class="modal-footer border-0 justify-content-center">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">CANCEL</button>
-          <input type="submit" value="SAVE CHANGES" class="btn btn-dark">
-        </div>
-        </form>
       </div>
     </div>
   </div>
@@ -324,27 +233,29 @@
       <div class="card p-5">
         <div class="row flex-lg-row justify-content-lg-start justify-content-center align-items-end">
           <div class="col-md-3 col-sm-12 text-center">
-            <img src="/static/img/profiles/profile-pic.jpg" alt="avatar" class="rounded-circle me-md-5" width="128"
-              height="128">
+            <img src="{{ url_for('static', filename=talent_info.pfp_default) }}" alt="avatar"
+              class="rounded-circle me-md-5" width="128" height="128">
           </div>
           <div class="col-md-9 col-sm-12 text-center text-md-start">
-            <p class="card-title fs-2 fw-semibold mt-sm-2">Michael Wazowski</p>
-            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-gamepad-modern"></i>&nbsp;Apex Legends
-            </p>
-            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-circle-dollar"></i>&nbsp;20k/match</p>
-            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-star"></i>&nbsp;4.7</p>
+            <p class="card-title fs-2 fw-semibold mt-sm-2">{{ talent_info.fullname }}</p>
+            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-gamepad-modern"></i>&nbsp;
+              {{ talent_info.game }}</p>
+            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-circle-dollar"></i>&nbsp;{{
+              talent_info.unit }}</p>
+            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-star"></i>&nbsp;X.X</p>
           </div>
         </div>
 
         <div class="card my-5">
           <div class="card-body">
             <ul class="list-group list-group-flush px-2">
-              <li class="list-group-item">Rank/Level &nbsp;&nbsp;&nbsp;: Diamond IV</li>
-              <li class="list-group-item">Played Since : 2021</li>
-              <li class="list-group-item">Region &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: US,
-                Europe
+              <li class="list-group-item">Rank/Level &nbsp;&nbsp;&nbsp;: {{ talent_info.rank }}</li>
+              <li class="list-group-item">Played Since : {{ talent_info.since }}</li>
+              <li class="list-group-item">Region &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                {{ talent_info.region }}
               </li>
-              <li class="list-group-item">Platform &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PC</li>
+              <li class="list-group-item">Platform &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                {{ talent_info.platform }}</li>
             </ul>
           </div>
         </div>
