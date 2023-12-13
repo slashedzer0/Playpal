@@ -260,8 +260,7 @@
           </div>
         </div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-          <a id="create-order" class="btn btn-dark btn-lg px-5 shadow-sm fw-semibold" data-bs-toggle="modal"
-            data-bs-target="#modal-order" onclick="create_order()">
+          <a id="create-order" class="btn btn-dark btn-lg px-5 shadow-sm fw-semibold" onclick="create_order()">
             ORDER
           </a>
         </div>
@@ -350,9 +349,10 @@
     function create_order() {
       {% set customer = user_info.role == 'customer' %}
 
-      {% if not customer %}
-      window.location.reload()
-      window.location.href = '/login'
+      {% if customer %}
+      $('#modal-order').modal('show');
+      {% else %}
+      window.location.href = '/login';
       {% endif %}
     }
   </script>
