@@ -62,8 +62,8 @@
         <div class="btn-group" id="profile-menu">
           <button type="button" class="btn btn-outline-link fw-semibold" data-bs-toggle="dropdown"
             aria-expanded="false">
-            <img src="{{ url_for('static', filename=user_info.pfp_default) }}" class="rounded-circle" width="30" height="30"
-              loading="lazy" />
+            <img src="{{ url_for('static', filename=user_info.pfp_default) }}" class="rounded-circle" width="30"
+              height="30" loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <div>
@@ -180,47 +180,15 @@
         <thead>
           <tr>
             <th scope="col">No</th>
+            <th scope="col">Order ID</th>
             <th scope="col">Game</th>
-            <th scope="col">Quantity</th>
+            <th scope="col">Qty</th>
             <th scope="col">Payment Method</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Apex Legends</td>
-            <td>3</td>
-            <td>M-Banking</td>
-            <td class="text-secondary">WAITING</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Valorant</td>
-            <td>1</td>
-            <td>E-Wallet</td>
-            <td class="text-success">DONE</td>
-            <td> <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modal-review">ADD REVIEW</a>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Dota 2</td>
-            <td>1</td>
-            <td>M-Banking</td>
-            <td class="text-danger">DECLINED</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>PUBG Mobile</td>
-            <td>2</td>
-            <td>M-Banking</td>
-            <td class="text-warning">PENDING</td>
-            <td> <a href="#" class="btn btn-dark">DONE</a></td>
-          </tr>
+        <tbody id="customer-history">
         </tbody>
       </table>
     </div>
@@ -232,22 +200,23 @@
       <div class="modal-content w-75 mx-auto p-2">
         <h4 class="modal-title fw-semibold text-center my-3">Add Review</h4>
         <div class="modal-body border-0 px-3 py-0">
-          <form action="/api/select_rating" method="POST">
-            <div class="mb-3">
-              <select class="form-select" aria-label="Select rating" required>
-                <option selected hidden>-- Select rating --</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
+          <div class="mb-3 visually-hidden">
+            <input type="text" class="form-control" id="order-id" placeholder="Order ID" value="">
+          </div>
+          <div class="mb-3">
+            <select class="form-select" id="rating" required>
+              <option selected hidden value="">-- Select rating --</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer border-0 justify-content-center">
-          <input type="submit" value="CONFIRM" class="btn btn-dark">
+          <button class="btn btn-dark" onclick="add_rating()">CONFIRM</button>
         </div>
-        </form>
       </div>
     </div>
   </div>
@@ -259,6 +228,10 @@
 
   <!-- custom js -->
   <script>
+    $(document).ready(function () {
+      load_customer_history();
+    });
+
     {% if user_info.role == 'customer' %}
     $("#dashboard-navbar").attr("href", "/customer-summary")
     $("#login-navbar").addClass('visually-hidden')

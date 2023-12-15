@@ -257,49 +257,15 @@
         <thead>
           <tr>
             <th scope="col">No</th>
+            <th scope="col">Order ID</th>
             <th scope="col">Quantity</th>
             <th scope="col">Payment Method</th>
             <th scope="col">Note</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>3</td>
-            <td>M-Banking</td>
-            <td>-</td>
-            <td> <a href="#" class="btn btn-success">APPROVE</a>
-              <a href="#" class="btn btn-danger">DECLINE</a>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>1</td>
-            <td>E-Wallet</td>
-            <td>??</td>
-            <td> <a href="#" class="btn btn-success">APPROVE</a>
-              <a href="#" class="btn btn-danger">DECLINE</a>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>1</td>
-            <td>M-Banking</td>
-            <td>Nothing</td>
-            <td> <a href="#" class="btn btn-success">APPROVE</a>
-              <a href="#" class="btn btn-danger">DECLINE</a>
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>2</td>
-            <td>M-Banking</td>
-            <td>zzz..</td>
-            <td> <a href="#" class="btn btn-success">APPROVE</a>
-              <a href="#" class="btn btn-danger">DECLINE</a>
-            </td>
-          </tr>
+        <tbody id="talent-orders">
+
         </tbody>
       </table>
     </div>
@@ -312,6 +278,10 @@
 
   <!-- custom js -->
   <script>
+    $(document).ready(function () {
+      load_talent_orders();
+    });
+
     {% if user_info.role == 'customer' %}
     $("#dashboard-navbar").attr("href", "/customer-summary")
     $("#login-navbar").addClass('visually-hidden')

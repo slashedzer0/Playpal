@@ -258,36 +258,30 @@
         <thead>
           <tr>
             <th scope="col">No</th>
+            <th scope="col">Order ID</th>
             <th scope="col">Quantity</th>
             <th scope="col">Payment Method</th>
             <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody>
+          {% for order in received_orders %}
           <tr>
-            <td>1</td>
-            <td>3</td>
-            <td>M-Banking</td>
+            <td>{{ loop.index }}</td>
+            <td>{{ order.order_id }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>{{ order.payment }}</td>
+            {% if order.status == 'pending' %}
             <td class="text-warning">PENDING</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>1</td>
-            <td>E-Wallet</td>
+            {% elif order.status == 'done' %}
             <td class="text-success">DONE</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>1</td>
-            <td>M-Banking</td>
+            {% elif order.status == 'completed' %}
+            <td class="text-primary">COMPLETED</td>
+            {% else %}
             <td class="text-danger">DECLINED</td>
+            {% endif %}
           </tr>
-          <tr>
-            <td>4</td>
-            <td>2</td>
-            <td>M-Banking</td>
-            <td class="text-success">DONE</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
@@ -298,7 +292,6 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
 
-  <!-- custom js -->
   <!-- custom js -->
   <script>
     {% if user_info.role == 'customer' %}

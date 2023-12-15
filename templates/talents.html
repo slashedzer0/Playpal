@@ -231,7 +231,20 @@
     <div class="container col-xxl-9 p-3">
       <h2 class="text-dark text-center mt-5 py-4 fw-semibold pt-5">All Talents</h2>
       <div id="list-talents" class="row row-cols-2 row-cols-md-3 row-cols-lg-6">
-
+        {% for talent in talents %}
+        <div class="col mb-2">
+          <div class="card">
+            <a href="/profile/{{ talent.username }}">
+              <img src="/static/{{ talent.pfp_default }}" class="card-img">
+              <div class="card-img-overlay p-2">
+                <p class="fs-6 badge bg-secondary bg-opacity-50"><i class="fa-solid fa-star"
+                    style="color: #fcbe3f;"></i>&nbsp;{{ talent.ovr_rating }}</p>
+              </div>
+            </a>
+          </div>
+          <p class="mt-2 fs-5 fw-semibold lh-sm">{{ talent.fullname }}</p>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -261,10 +274,6 @@
 
   <!-- custom js -->
   <script>
-    $(document).ready(function () {
-      load_talents();
-    });
-
     {% if user_info.role == 'customer' %}
     $("#dashboard-navbar").attr("href", "/customer-summary")
     $("#login-navbar").addClass('visually-hidden')

@@ -242,7 +242,9 @@
               {{ talent_info.game }}</p>
             <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-circle-dollar"></i>&nbsp;{{
               talent_info.unit }}</p>
-            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-star"></i>&nbsp;X.X</p>
+            <p class="fs-6 badge bg-dark bg-opacity-25"><i class="fa-solid fa-star"></i>&nbsp;{{ overall_rating }}</p>
+            <p id="username-talent" class="visually-hidden">{{ talent_info.username }}</p>
+            <p id="game-talent" class="visually-hidden">{{ talent_info.game }}</p>
           </div>
         </div>
 
@@ -260,7 +262,7 @@
           </div>
         </div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-          <a id="create-order" class="btn btn-dark btn-lg px-5 shadow-sm fw-semibold" onclick="create_order()">
+          <a id="order-button" class="btn btn-dark btn-lg px-5 shadow-sm fw-semibold" onclick="proceed_order()">
             ORDER
           </a>
         </div>
@@ -272,12 +274,12 @@
   <div id="modal-order" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content w-75 mx-auto p-2">
-        <h4 class="modal-title fw-semibold text-center my-3">Create Order</h4>
-        <div class="modal-body border-0 px-3 py-0">
-          <form action="/api/create_order" method="POST">
+        <div id="form-order" class="">
+          <h4 class="modal-title fw-semibold text-center my-3">Create Order</h4>
+          <div class="modal-body border-0 px-3 py-0">
             <div class="mb-3">
-              <select class="form-select" id="quantity" name="quantity" required>
-                <option selected hidden>-- Select quantity --</option>
+              <select class="form-select" id="quantity" required>
+                <option selected hidden value="">-- Select quantity --</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -287,26 +289,40 @@
               </select>
             </div>
             <div class="mb-3">
-              <select class="form-select" id="payment" name="payment" required>
-                <option selected hidden>-- Select payment method --</option>
+              <select class="form-select" id="payment" required>
+                <option selected hidden value="">-- Select payment method --</option>
                 <option value="E-Wallet">E-Wallet</option>
                 <option value="M-Banking">M-Banking</option>
                 <option value="Direct Transfer">Direct Transfer</option>
               </select>
             </div>
             <div class="mb-3">
-              <textarea class="form-control" id="note" name="note" placeholder="Leave some note..."
+              <textarea class="form-control" id="note" placeholder="Leave some note..."
                 style="height: 6rem;"></textarea>
             </div>
+          </div>
+          <div class="modal-footer border-0 justify-content-center">
+            <button class="btn btn-dark" onclick="create_order()">CONFIRM</button>
+          </div>
         </div>
-        <div class="modal-footer border-0 justify-content-center">
-          <input type="submit" value="CONFIRM" class="btn btn-dark">
+
+        <div id="success-order" style="display: none;">
+          <div class="modal-header flex-column border-0">
+            <img src="/static/img/checked.png" alt="checked icon" loading="lazy">
+            <h4 class="modal-title fw-semibold text-center mt-2">Thank You</h4>
+          </div>
+          <div class="modal-body border-0 p-0">
+            <p class="text-center">Your order has been received, <br>Please go to dashboard to check <br> your order
+              status.</p>
+          </div>
+          <div class="modal-footer border-0 justify-content-center">
+            <button type="button" class="btn btn-outline-dark px-4" data-bs-dismiss="modal"
+              onclick="window.location.reload()">OKAY</button>
+          </div>
         </div>
-        </form>
       </div>
     </div>
   </div>
-
 
   <!-- footer -->
   <div class="container">
@@ -340,13 +356,13 @@
     {% elif user_info.role == 'talent' %}
     $("#dashboard-navbar").attr("href", "/talent-summary")
     $("#login-navbar").addClass('visually-hidden')
-    $("#create-order").addClass('visually-hidden')
+    $("#order-button").addClass('visually-hidden')
     {% else %}
     $("#dashboard-navbar").addClass('visually-hidden')
     $("#profile-menu").addClass('visually-hidden')
     {% endif %}
 
-    function create_order() {
+    function proceed_order() {
       {% set customer = user_info.role == 'customer' %}
 
       {% if customer %}

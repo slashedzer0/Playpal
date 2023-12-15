@@ -239,37 +239,222 @@ function update_talent() {
   });
 }
 
-function load_talents() {
+function create_order() {
+  let username_customer = $("#username").val();
+  let username_talent = $("#username-talent").text();
+  let game = $("#game-talent").text();
+  let quantity = $("#quantity").val();
+  let payment = $("#payment").val();
+  let note = $("#note").val();
+
+  if (quantity === "") {
+    $("#quantity").focus();
+    return;
+  } else if (payment === "") {
+    $("#payment").focus();
+    return;
+  } else {
+    $("#form-order").fadeOut(500, function () {
+      $("#success-order").fadeIn(500);
+    });
+  }
+
   $.ajax({
-    type: "GET",
-    url: "/api/load_talents",
+    type: "POST",
+    url: "/api/create_order",
+    data: {
+      customer: username_customer,
+      talent: username_talent,
+      game: game,
+      quantity: quantity,
+      payment: payment,
+      note: note,
+    },
     success: function (response) {
       console.log(response);
       if (response["result"] === "success") {
-        talents = response["talents"];
-        talents.sort((a, b) => a.fullname.localeCompare(b.fullname));
+        console.log("Order created");
+      }
+    },
+  });
+}
 
-        for (let i = 0; i < talents.length; i++) {
-          let talent = talents[i];
-          let username = talent.username;
-          let fullname = talent.fullname;
-          let avatar = talent.pfp_default;
+function load_customer_history() {
+  $.ajax({
+    type: "GET",
+    url: "/api/load_customer_history",
+    data: {},
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        created_orders = response["created_orders"];
+
+        for (let i = 0; i < created_orders.length; i++) {
+          let count = i + 1;
+          let order = created_orders[i];
+          let order_id = order.order_id;
+          let game = order.game;
+          let quantity = order.quantity;
+          let payment = order.payment;
+          let status = order.status;
+
+          if (status == "waiting") {
+            status = '<td class="text-secondary">WAITING</td><td></td>';
+          } else if (status == "done") {
+            status =
+              '<td class="text-success">DONE</td><td> <a class="btn btn-dark" onclick="proceed_review(' +
+              i +
+              ')">ADD REVIEW</a></td>';
+          } else if (status == "completed") {
+            status = '<td class="text-primary">COMPLETED</td><td></td>';
+          } else if (status == "declined") {
+            status = '<td class="text-danger">DECLINED</td><td></td>';
+          } else if (status == "pending") {
+            status =
+              '<td class="text-warning">PENDING</td><td> <a onclick="complete_order(' +
+              i +
+              ')" class="btn btn-dark">DONE</a></td>';
+          } else {
+            status = '<td class="text-dark">UNKNOWN</td><td></td>';
+          }
+
           let temp_html = `
-          <div class="col mb-2">
-          <div class="card">
-            <a href="/profile/${username}">
-              <img src="/static/${avatar}" class="card-img">
-              <div class="card-img-overlay p-2">
-                <p class="fs-6 badge bg-secondary bg-opacity-50"><i class="fa-solid fa-star"
-                    style="color: #fcbe3f;"></i>&nbsp;X.X</p>
-              </div>
-            </a>
-          </div>
-          <p class="mt-2 fs-5 fw-semibold lh-sm">${fullname}</p>
-        </div>
+          <tr>
+            <td>${count}</td>
+            <td id="order-id-${count}">${order_id}</td>
+            <td>${game}</td>
+            <td>${quantity}</td>
+            <td>${payment}</td>
+            ${status}
+          </tr>
           `;
-          $("#list-talents").append(temp_html);
+          $("#customer-history").append(temp_html);
         }
+      }
+    },
+  });
+}
+
+function load_talent_orders() {
+  $.ajax({
+    type: "GET",
+    url: "/api/load_talent_orders",
+    data: {},
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        received_orders = response["received_orders"];
+
+        for (let i = 0; i < received_orders.length; i++) {
+          let count = i + 1;
+          let order = received_orders[i];
+          let order_id = order.order_id;
+          let quantity = order.quantity;
+          let payment = order.payment;
+          let note = order.note;
+          let status = order.status;
+
+          if (status == "waiting") {
+            status =
+              '<td><a onclick="approve_order(' +
+              i +
+              ')" class="btn btn-success">APPROVE</a>&nbsp;&nbsp;<a onclick="decline_order(' +
+              i +
+              ')" class="btn btn-danger">DECLINE</a></td>';
+          }
+
+          let temp_html = `
+          <tr>
+            <td>${count}</td>
+            <td id="order-id-${count}">${order_id}</td>
+            <td>${quantity}</td>
+            <td>${payment}</td>
+            <td>${note}</td>
+            ${status}
+          </tr>
+          `;
+          $("#talent-orders").append(temp_html);
+        }
+      }
+    },
+  });
+}
+
+function approve_order(index) {
+  let order_id = $("#order-id-" + (index + 1)).text();
+
+  $.ajax({
+    type: "POST",
+    url: "/api/approve_order",
+    data: {
+      order_id: order_id,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        window.location.reload();
+      }
+    },
+  });
+}
+
+function decline_order(index) {
+  let order_id = $("#order-id-" + (index + 1)).text();
+
+  $.ajax({
+    type: "POST",
+    url: "/api/decline_order",
+    data: {
+      order_id: order_id,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        window.location.reload();
+      }
+    },
+  });
+}
+
+function complete_order(index) {
+  let order_id = $("#order-id-" + (index + 1)).text();
+
+  $.ajax({
+    type: "POST",
+    url: "/api/complete_order",
+    data: {
+      order_id: order_id,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        window.location.reload();
+      }
+    },
+  });
+}
+
+function proceed_review(index) {
+  let order_id = $("#order-id-" + (index + 1)).text();
+  $("#modal-review").modal("show");
+  $("#order-id").val(order_id);
+}
+
+function add_rating() {
+  let order_id = $("#order-id").val();
+  let rating = $("#rating").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/api/add_rating",
+    data: {
+      order_id: order_id,
+      rating: rating,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response["result"] === "success") {
+        window.location.reload();
       }
     },
   });

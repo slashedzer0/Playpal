@@ -62,8 +62,8 @@
         <div class="btn-group" id="profile-menu">
           <button type="button" class="btn btn-outline-link fw-semibold" data-bs-toggle="dropdown"
             aria-expanded="false">
-            <img src="{{ url_for('static', filename=user_info.pfp_default) }}" class="rounded-circle" width="30" height="30"
-              loading="lazy" />
+            <img src="{{ url_for('static', filename=user_info.pfp_default) }}" class="rounded-circle" width="30"
+              height="30" loading="lazy" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <div>
@@ -179,14 +179,14 @@
       <div class="row mt-5">
         <div class="col">
           <div class="card text-center p-2 bg-warning-subtle border-0">
-            <h1 class="display-3 fw-medium"><i class="fa-solid fa-star-exclamation"></i>&nbsp;18
+            <h1 class="display-3 fw-medium"><i class="fa-solid fa-star-exclamation"></i>&nbsp;{{ total_reviews}}
             </h1>
             <p class="fs-5 fw-semibold text-secondary lh-sm">Total reviews</p>
           </div>
         </div>
         <div class="col">
           <div class="card text-center p-2 bg-info-subtle border-0">
-            <h1 class="display-3 fw-medium"><i class="fa-solid fa-cart-arrow-up"></i>&nbsp;13
+            <h1 class="display-3 fw-medium"><i class="fa-solid fa-cart-arrow-up"></i>&nbsp;{{ total_orders }}
             </h1>
             <p class="fs-5 fw-semibold text-secondary lh-sm">Total orders</p>
           </div>

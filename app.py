@@ -33,6 +33,19 @@ def home():
                    '_id': False, 'password': False}))
     shuffled_talents = random.sample(talents, 6)
 
+    for talent in shuffled_talents:
+        sum_rating = db.orders.find(
+            {"talent": talent["username"], "rating": {"$exists": True}})
+        total_rating = 0
+        for rating in sum_rating:
+            total_rating += int(rating["rating"])
+
+        received_rating = db.orders.count_documents(
+            {"talent": talent["username"], "rating": {"$exists": True}})
+        overall_rating = total_rating / received_rating if received_rating != 0 else 0
+        overall_rating = str(overall_rating)[:3]
+        talent["ovr_rating"] = overall_rating
+
     if token:
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
@@ -95,18 +108,45 @@ def profile_page(username):
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
             user_info = db.users.find_one({"username": payload["username"]})
+            sum_rating = db.orders.find(
+                {"talent": username, "rating": {"$exists": True}})
+            total_rating = 0
+            for rating in sum_rating:
+                total_rating += int(rating["rating"])
+
+            received_rating = db.orders.count_documents(
+                {"talent": username, "rating": {"$exists": True}})
+            overall_rating = total_rating / received_rating if received_rating != 0 else 0
+            overall_rating = str(overall_rating)[:3]
         except jwt.ExpiredSignatureError:
             return redirect(url_for("login_page"))
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
 
-    return render_template("profile.html", user_info=user_info, talent_info=talent_info)
+    return render_template("profile.html", user_info=user_info, talent_info=talent_info, overall_rating=overall_rating)
 
 
 @app.route('/talents')
 def talents_page():
     token = request.cookies.get("token")
     user_info = None
+
+    talents = list(db.users.find({'role': 'talent'}, {
+                     '_id': False, 'password': False}))
+    sorted_talents = sorted(talents, key=lambda x: x['fullname'].lower())
+    
+    for talent in talents:
+        sum_rating = db.orders.find(
+            {"talent": talent["username"], "rating": {"$exists": True}})
+        total_rating = 0
+        for rating in sum_rating:
+            total_rating += int(rating["rating"])
+
+        received_rating = db.orders.count_documents(
+            {"talent": talent["username"], "rating": {"$exists": True}})
+        overall_rating = total_rating / received_rating if received_rating != 0 else 0
+        overall_rating = str(overall_rating)[:3]
+        talent["ovr_rating"] = overall_rating
 
     if token:
         try:
@@ -117,7 +157,7 @@ def talents_page():
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
 
-    return render_template("talents.html", user_info=user_info)
+    return render_template("talents.html", user_info=user_info, talents=sorted_talents)
 
 
 @app.route('/games')
@@ -126,6 +166,20 @@ def games_page():
     user_info = None
     talents = list(db.users.find({'role': 'talent'}, {
                    '_id': False, 'password': False}))
+    sorted_talents = sorted(talents, key=lambda x: x['fullname'].lower())
+    
+    for talent in talents:
+        sum_rating = db.orders.find(
+            {"talent": talent["username"], "rating": {"$exists": True}})
+        total_rating = 0
+        for rating in sum_rating:
+            total_rating += int(rating["rating"])
+
+        received_rating = db.orders.count_documents(
+            {"talent": talent["username"], "rating": {"$exists": True}})
+        overall_rating = total_rating / received_rating if received_rating != 0 else 0
+        overall_rating = str(overall_rating)[:3]
+        talent["ovr_rating"] = overall_rating
 
     if token:
         try:
@@ -136,7 +190,7 @@ def games_page():
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
 
-    return render_template("games.html", user_info=user_info, talents=talents)
+    return render_template("games.html", user_info=user_info, talents=sorted_talents)
 
 
 @app.route('/customer-summary')
@@ -148,10 +202,14 @@ def customer_summary_page():
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
             user_info = db.users.find_one({"username": payload["username"]})
+            total_reviews = db.orders.count_documents(
+                {"customer": user_info["username"], "status": "completed"})
+            total_orders = db.orders.count_documents(
+                {"customer": user_info["username"]})
 
             if user_info.get("role") != "customer":
                 return redirect(url_for("home"))
-            return render_template('/customer/summary.html', user_info=user_info)
+            return render_template('/customer/summary.html', user_info=user_info, total_reviews=total_reviews, total_orders=total_orders)
 
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
             return redirect(url_for("login_page"))
@@ -191,10 +249,32 @@ def talent_summary_page():
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
             user_info = db.users.find_one({"username": payload["username"]})
+            username = user_info["username"]
+
+            quantity = db.orders.find({"talent": username, "status": {"$in": ["done", "completed"]}, "quantity": {
+                "$exists": True}})
+            total_quantity = 0
+            for qty in quantity:
+                total_quantity += int(qty["quantity"])
+
+            total_income =  int(user_info["price"]) * total_quantity 
+            received_orders = db.orders.count_documents(
+                {"talent": user_info["username"]})
+
+            sum_rating = db.orders.find(
+                {"talent": username, "rating": {"$exists": True}})
+            total_rating = 0
+            for rating in sum_rating:
+                total_rating += int(rating["rating"])
+
+            received_rating = db.orders.count_documents(
+                {"talent": username, "rating": {"$exists": True}})
+            overall_rating = total_rating / received_rating if received_rating != 0 else 0
+            overall_rating = str(overall_rating)[:3]
 
             if user_info.get("role") != "talent":
                 return redirect(url_for("home"))
-            return render_template('/talent/summary.html', user_info=user_info)
+            return render_template('/talent/summary.html', user_info=user_info, overall_rating=overall_rating, total_income=total_income, received_orders=received_orders)
 
         except jwt.ExpiredSignatureError:
             return redirect(url_for("login_page"))
@@ -214,10 +294,12 @@ def talent_history_page():
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
             user_info = db.users.find_one({"username": payload["username"]})
+            received_orders = list(db.orders.find({'talent': user_info["username"], 'status': {'$ne': 'waiting'}}, {
+                '_id': False}))
 
             if user_info.get("role") != "talent":
                 return redirect(url_for("home"))
-            return render_template('/talent/history.html', user_info=user_info)
+            return render_template('/talent/history.html', user_info=user_info, received_orders=received_orders)
 
         except jwt.ExpiredSignatureError:
             return redirect(url_for("login_page"))
@@ -412,12 +494,133 @@ def delete_account():
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
 
+@app.route('/api/load_customer_history')
+def load_customer_history():
+    token = request.cookies.get('token')
 
-@app.route('/api/load_talents')
-def load_talents():
-    talents = list(db.users.find({'role': 'talent'}, {
-                   '_id': False, 'password': False}))
-    return jsonify({'result': 'success', 'talents': talents})
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            username = payload['username']
+            created_orders = list(db.orders.find({'customer': username}, {
+                '_id': False}))
+            return jsonify({'result': 'success', 'created_orders': created_orders})
+
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for('home'))
+
+
+@app.route('/api/load_talent_orders')
+def load_talent_orders():
+    token = request.cookies.get('token')
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            username = payload['username']
+            received_orders = list(db.orders.find({'talent': username, 'status': 'waiting'}, {
+                '_id': False}))
+            return jsonify({'result': 'success', 'received_orders': received_orders})
+
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for('home'))
+
+
+@app.route('/api/create_order', methods=['POST'])
+def create_order():
+    username_customer = request.form['customer']
+    username_talent = request.form['talent']
+    order_id = username_customer[:3] + datetime.now().strftime("%d%H%M%S")
+    game = request.form['game']
+    quantity = request.form['quantity']
+    payment = request.form['payment']
+    note = request.form['note']
+
+    doc = {
+        "customer": username_customer,
+        "talent": username_talent,
+        "order_id": order_id,
+        "game": game,
+        "quantity": quantity,
+        "payment": payment,
+        "note": note,
+        "status": "waiting",
+    }
+
+    db.orders.insert_one(doc)
+    return jsonify({'result': 'success'})
+
+
+@app.route('/api/add_rating', methods=['POST'])
+def add_rating():
+    token = request.cookies.get('token')
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            order_id = request.form['order_id']
+            rating = request.form['rating']
+
+            new_doc = {
+                'rating': rating,
+                'status': 'completed',
+            }
+
+            db.orders.update_one({'order_id': order_id}, {'$set': new_doc})
+            return jsonify({'result': 'success'})
+
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for('home'))
+
+
+@app.route('/api/decline_order', methods=['POST'])
+def decline_order():
+    token = request.cookies.get('token')
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            order_id = request.form['order_id']
+            db.orders.update_one({'order_id': order_id}, {
+                '$set': {'status': 'declined'}})
+            return jsonify({'result': 'success'})
+
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for('home'))
+
+
+@app.route('/api/approve_order', methods=['POST'])
+def approve_order():
+    token = request.cookies.get('token')
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            order_id = request.form['order_id']
+            db.orders.update_one({'order_id': order_id}, {
+                '$set': {'status': 'pending'}})
+            return jsonify({'result': 'success'})
+
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for('home'))
+
+
+@app.route('/api/complete_order', methods=['POST'])
+def complete_order():
+    token = request.cookies.get('token')
+
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+
+            order_id = request.form['order_id']
+            print(order_id)
+            db.orders.update_one({'order_id': order_id}, {
+                '$set': {'status': 'done'}})
+            return jsonify({'result': 'success'})
+
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
