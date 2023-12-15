@@ -104,20 +104,22 @@ def profile_page(username):
     user_info = None
     talent_info = db.users.find_one({"username": username})
 
+    sum_rating = db.orders.find(
+        {"talent": username, "rating": {"$exists": True}})
+    total_rating = 0
+    for rating in sum_rating:
+        total_rating += int(rating["rating"])
+
+    received_rating = db.orders.count_documents(
+        {"talent": username, "rating": {"$exists": True}})
+    overall_rating = total_rating / received_rating if received_rating != 0 else 0
+    overall_rating = str(overall_rating)[:3]
+
     if token:
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
             user_info = db.users.find_one({"username": payload["username"]})
-            sum_rating = db.orders.find(
-                {"talent": username, "rating": {"$exists": True}})
-            total_rating = 0
-            for rating in sum_rating:
-                total_rating += int(rating["rating"])
 
-            received_rating = db.orders.count_documents(
-                {"talent": username, "rating": {"$exists": True}})
-            overall_rating = total_rating / received_rating if received_rating != 0 else 0
-            overall_rating = str(overall_rating)[:3]
         except jwt.ExpiredSignatureError:
             return redirect(url_for("login_page"))
         except jwt.exceptions.DecodeError:
@@ -132,9 +134,9 @@ def talents_page():
     user_info = None
 
     talents = list(db.users.find({'role': 'talent'}, {
-                     '_id': False, 'password': False}))
+        '_id': False, 'password': False}))
     sorted_talents = sorted(talents, key=lambda x: x['fullname'].lower())
-    
+
     for talent in talents:
         sum_rating = db.orders.find(
             {"talent": talent["username"], "rating": {"$exists": True}})
@@ -167,7 +169,7 @@ def games_page():
     talents = list(db.users.find({'role': 'talent'}, {
                    '_id': False, 'password': False}))
     sorted_talents = sorted(talents, key=lambda x: x['fullname'].lower())
-    
+
     for talent in talents:
         sum_rating = db.orders.find(
             {"talent": talent["username"], "rating": {"$exists": True}})
@@ -257,7 +259,7 @@ def talent_summary_page():
             for qty in quantity:
                 total_quantity += int(qty["quantity"])
 
-            total_income =  int(user_info["price"]) * total_quantity 
+            total_income = int(user_info["price"]) * total_quantity
             received_orders = db.orders.count_documents(
                 {"talent": user_info["username"]})
 
@@ -493,6 +495,7 @@ def delete_account():
             return redirect(url_for("login_page"))
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login_page"))
+
 
 @app.route('/api/load_customer_history')
 def load_customer_history():
