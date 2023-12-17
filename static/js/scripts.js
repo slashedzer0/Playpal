@@ -444,6 +444,11 @@ function add_rating() {
   let order_id = $("#order-id").val();
   let rating = $("#rating").val();
 
+  if (rating === "") {
+    $("#rating").focus();
+    return;
+  }
+
   $.ajax({
     type: "POST",
     url: "/api/add_rating",
